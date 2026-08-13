@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shrey Sharma</title>
+<meta name="description" content="Shrey Sharma — deep learning engineer."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@200;300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+html,body{background:#000}
+body{overflow-x:hidden}
+
+#stage{height:520vh;position:relative;z-index:10}
+.viewport{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
+
+#canopy{
+  position:absolute;inset:0;width:100%;height:100%;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.55))
+         drop-shadow(0 0 14px rgba(255,255,255,.20));
+}
+
+/* ── branch labels: binary, pinned to the leaf tips ── */
+.bough{
+  position:absolute;transform:translate(-50%,-50%);
+  opacity:0;pointer-events:none;z-index:30;
+  transition:opacity .8s ease;
+}
+.bough a{
+  text-decoration:none;display:block;padding:.6rem .4rem;
+  outline:none;
+}
+.bits{
+  display:block;width:150px;margin:0 auto;text-align:center;
+  font-family:var(--mono);font-weight:300;font-size:7.5px;line-height:2.1;
+}
+.byte{
+  display:inline-block;width:40px;margin:0 3px;
+  color:rgba(255,255,255,.45);
+  text-shadow:0 0 6px rgba(255,255,255,.3);
+  transition:color .3s ease,text-shadow .3s ease,letter-spacing .3s ease;
+  font-style:normal;font-weight:300;
+}
+.byte.on{
+  color:#fff;letter-spacing:.06em;
+  text-shadow:0 0 16px rgba(255,255,255,.85),0 0 34px rgba(255,255,255,.35);
+}
+.bough a:focus-visible .bits{outline:1px solid rgba(255,255,255,.4);outline-offset:6px}
+
+/* ── name: fixed top-left ── */
+#site-name{
+  position:fixed;top:1.6rem;left:5vw;z-index:60;
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.05rem,2.1vw,1.4rem);
+  letter-spacing:-.01em;color:var(--mist);
+  pointer-events:none;
+}
+#site-name em{font-style:italic;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35)}
+
+/* ── music toggle ── */
+#music-toggle{
+  position:fixed;top:1.6rem;right:5vw;z-index:60;
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--rule);background:rgba(255,255,255,.02);
+  color:var(--dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:color .3s ease,border-color .3s ease,background .3s ease;
+}
+#music-toggle:hover{color:var(--mist);border-color:var(--bark)}
+#music-toggle svg{width:15px;height:15px}
+#music-toggle .bar{transform-origin:center;transition:transform .4s ease}
+#music-toggle.playing .bar{animation:wave 1s ease-in-out infinite}
+#music-toggle .bar:nth-child(2){animation-delay:.15s}
+#music-toggle .bar:nth-child(3){animation-delay:.3s}
+@keyframes wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+
+/* ── overlay copy ── */
+.overlay{position:absolute;inset:0;pointer-events:none;z-index:20}
+#intro{
+  position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);
+  text-align:center;width:min(90vw,640px);
+}
+#intro .scroll{
+  font-size:.54rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dimmer);
+  display:inline-flex;align-items:center;gap:.75rem;
+}
+#intro .scroll::after{
+  content:'';width:42px;height:1px;background:var(--dimmer);
+  animation:pull 3.2s ease-in-out infinite;transform-origin:left;
+}
+@keyframes pull{0%,100%{transform:scaleX(.3);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+
+#hint{
+  position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);
+  opacity:0;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dimmer);
+}
+
+/* JS-off fallback only */
+.noscript-nav{
+  position:relative;z-index:40;display:flex;gap:2rem;justify-content:center;
+  padding:3rem 5vw;background:#000;
+}
+.noscript-nav a{
+  font-family:var(--serif);font-size:1.2rem;color:#fff;text-decoration:none;
+}
+
+@media(max-width:860px){
+  #stage{height:400vh}
+  .bits{width:120px;font-size:6.5px}
+  .byte{width:32px;margin:0 2px}
+}
+</style>
+</head>
+<body>
+
+<div id="site-name">Shrey <em>Sharma</em></div>
+
+<audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
+<button id="music-toggle" aria-label="Play background music" aria-pressed="false">
+  <svg viewBox="0 0 16 16" fill="none">
+    <rect class="bar" x="1" y="5" width="2.4" height="6" rx="1.2" fill="currentColor"/>
+    <rect class="bar" x="6.8" y="2" width="2.4" height="12" rx="1.2" fill="currentColor"/>
+    <rect class="bar" x="12.6" y="6.5" width="2.4" height="3" rx="1.2" fill="currentColor"/>
+  </svg>
+</button>
+
+<div id="stage">
+  <div class="viewport">
+    <canvas id="canopy" aria-label="A sprout of shifting characters that grows into a tree"></canvas>
+
+    <!-- the navigation. data-code is what gets encoded to binary. -->
+    <div class="bough" data-code="ABOUT">
+      <a href="about.html" aria-label="About Shrey"><span class="bits"></span></a>
+    </div>
+    <div class="bough" data-code="PROJECTS">
+      <a href="projects.html" aria-label="Projects"><span class="bits"></span></a>
+    </div>
+    <div class="bough" data-code="LINKS">
+      <a href="links.html" aria-label="Links"><span class="bits"></span></a>
+    </div>
+
+    <div class="overlay">
+      <div id="intro">
+        <div class="scroll">Scroll to grow</div>
+      </div>
+      <div id="hint">Hover the leaves</div>
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <nav class="noscript-nav">
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="links.html">Links</a>
+  </nav>
+</noscript>
+
+<script>
+(function(){
+  var audio = document.getElementById('bg-music');
+  var btn = document.getElementById('music-toggle');
+  function setPlaying(playing){
+    btn.classList.toggle('playing', playing);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    btn.setAttribute('aria-label', playing ? 'Pause background music' : 'Play background music');
+  }
+  btn.addEventListener('click', function(){
+    if(audio.paused){
+      audio.play().then(function(){
+        setPlaying(true);
+      }).catch(function(){
+        setPlaying(false);
+      });
+    } else {
+      audio.pause();
+      setPlaying(false);
+    }
+  });
+})();
+</script>
+<script src="tree.js"></script>
+</body>
+</html>

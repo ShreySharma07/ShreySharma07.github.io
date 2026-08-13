@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Projects — Shrey Sharma</title>
+<meta name="description" content="Projects by Shrey Sharma — Repliq, KARMA, and a math-specialized Llama 2 fine-tune."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@200;300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+html,body{background:#000}
+body{overflow-x:hidden}
+
+/* ── the net: a sticky hero that dissolves on scroll ── */
+#net-stage{height:430vh;position:relative;z-index:10}
+#net-stage .viewport{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
+#net{
+  position:absolute;inset:0;width:100%;height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.35));
+}
+
+#net-copy{
+  position:absolute;left:50%;bottom:9vh;transform:translateX(-50%);
+  text-align:center;width:min(90vw,640px);z-index:20;pointer-events:none;
+}
+#net-copy .scroll{
+  font-size:.54rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dimmer);
+  display:inline-flex;align-items:center;gap:.75rem;
+}
+#net-copy .scroll::after{
+  content:'';width:42px;height:1px;background:var(--dimmer);
+  animation:pull 3.2s ease-in-out infinite;transform-origin:left;
+}
+@keyframes pull{0%,100%{transform:scaleX(.3);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+
+/* ── the work springs up out of the collapse ── */
+#work-page{position:relative;z-index:10;background:#000}
+.spring{
+  opacity:0;transform:translateY(64px) scale(.985);
+  transition:opacity .7s cubic-bezier(.2,.7,.2,1),
+             transform .9s cubic-bezier(.22,1.42,.36,1);
+}
+.spring.seen{opacity:1;transform:none}
+.s1{transition-delay:.06s}.s2{transition-delay:.14s}
+.s3{transition-delay:.22s}.s4{transition-delay:.30s}
+
+/* the numbers are the point — let them carry weight */
+.item p b{color:var(--mist);font-weight:400}
+
+@media(max-width:860px){
+  #net-stage{height:340vh}
+}
+@media(prefers-reduced-motion:reduce){
+  .spring{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="mark" href="index.html" aria-label="Shrey Sharma — home">
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="3" cy="10" r="1.6" fill="#fff"/>
+      <circle cx="10" cy="4" r="1.6" fill="#fff"/>
+      <circle cx="10" cy="16" r="1.6" fill="#fff"/>
+      <circle cx="17" cy="10" r="1.6" fill="#fff"/>
+      <path d="M3 10 10 4M3 10 10 16M10 4 17 10M10 16 17 10" stroke="#fff" stroke-opacity=".45" stroke-width="1"/>
+    </svg>
+    <span class="mark-name">Shrey Sharma</span>
+  </a>
+  <nav>
+    <a href="about.html">About</a>
+    <a href="projects.html" aria-current="page">Projects</a>
+    <a href="links.html">Links</a>
+  </nav>
+</header>
+
+<div id="net-stage">
+  <div class="viewport">
+    <canvas id="net" aria-label="A four-layer neural network firing signals forward and backward"></canvas>
+    <div id="net-copy">
+      <div class="scroll">Scroll to collapse</div>
+    </div>
+  </div>
+</div>
+
+<main id="work-page" class="page">
+  <div class="crumb spring">Selected work</div>
+  <h1 class="spring s1">Things I have <em>built</em></h1>
+  <p class="standfirst spring s2">
+    Agent systems, compiler-adjacent optimisation, and fine-tuned models —
+    mostly at the point where deep learning stops being a notebook and has to
+    survive contact with real hardware.
+  </p>
+
+  <section class="work">
+    <article class="item spring">
+      <div class="item-no">01</div>
+      <div>
+        <h2>Repliq</h2>
+        <p>
+          An autonomous agent platform that turns a screen recording into an
+          executable workflow, driven by a <b>ReAct</b> reason–act–observe loop over
+          LLM planning and iterative tool execution. Credentials sit behind a
+          zero-trust vault — Fernet encryption fronted by OAuth 2.0 — so sandboxed
+          agents never hold a long-lived secret. The MCP-compatible tool layer
+          carries full execution tracing, retry and error handling, and async
+          orchestration through FastAPI.
+        </p>
+        <div class="stack">Python · FastAPI · ReAct · MCP · OAuth 2.0</div>
+      </div>
+      <div class="aside">
+        <div class="yr">AI agent platform</div>
+        <a href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository</a>
+      </div>
+    </article>
+
+    <article class="item spring">
+      <div class="item-no">02</div>
+      <div>
+        <h2>KARMA</h2>
+        <p>
+          A five-agent LLM pipeline — classifier → planner → coder → verifier →
+          reflector — that writes and tunes CUDA kernels under hardware-grounded
+          prompting. It reaches <b>8.99× over PyTorch eager</b> and 1.08× over
+          <b>torch.compile</b> on GPT's GELU kernel, at <b>87.9% of theoretical peak
+          memory bandwidth</b> — on a 6 GB consumer GPU, where prior work needed H100
+          clusters. A deterministic closed-loop harness (compile → 3-seed correctness
+          → determinism gate → interleaved benchmarking) structurally prevents
+          reward-hacking, holding <b>0% false-positive correctness</b> across every
+          reported result. A RAG playbook over ChromaDB moves technique knowledge
+          between kernels: one authored entry lifted agent strategy from 0.26× to
+          1.09× on an identical task, and composing techniques took matmul from
+          0.585× to 0.975× of vendor-tuned cuBLAS.
+        </p>
+        <div class="stack">CUDA · Python · Multi-agent LLM · ChromaDB · RAG</div>
+      </div>
+      <div class="aside">
+        <div class="yr">Kernel optimisation</div>
+        <a href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository</a>
+      </div>
+    </article>
+
+    <article class="item spring">
+      <div class="item-no">03</div>
+      <div>
+        <h2>Math-Specialized Llama 2</h2>
+        <p>
+          Llama 2 fine-tuned on GSM8K for mathematical reasoning using QLoRA, PEFT,
+          and 8-bit quantization — cutting the GPU memory footprint by <b>70%</b>
+          while reaching a <b>0.83 training loss</b>. Shipped as a Dockerized,
+          production-ready inference pipeline on Hugging Face Spaces, covering the
+          full fine-tune-to-deploy lifecycle.
+        </p>
+        <div class="stack">PyTorch · Llama 2 · QLoRA · PEFT · Docker</div>
+      </div>
+      <div class="aside">
+        <div class="yr">LLM fine-tuning</div>
+        <a href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Hugging Face</a>
+      </div>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <span>Shrey Sharma</span>
+  <span>Lucknow, India</span>
+</footer>
+
+<script src="net.js"></script>
+</body>
+</html>

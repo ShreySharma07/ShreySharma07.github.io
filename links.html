@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Links — Shrey Sharma</title>
+<meta name="description" content="Where to find Shrey Sharma — GitHub, Hugging Face, LinkedIn, email."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@200;300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+html,body{background:#000}
+body{min-height:100vh;display:flex;flex-direction:column}
+.page{flex:1}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="mark" href="index.html" aria-label="Shrey Sharma — home">
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="3" cy="10" r="1.6" fill="#fff"/>
+      <circle cx="10" cy="4" r="1.6" fill="#fff"/>
+      <circle cx="10" cy="16" r="1.6" fill="#fff"/>
+      <circle cx="17" cy="10" r="1.6" fill="#fff"/>
+      <path d="M3 10 10 4M3 10 10 16M10 4 17 10M10 16 17 10" stroke="#fff" stroke-opacity=".45" stroke-width="1"/>
+    </svg>
+    <span class="mark-name">Shrey Sharma</span>
+  </a>
+  <nav>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="links.html" aria-current="page">Links</a>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="crumb veil">Elsewhere</div>
+  <h1 class="veil d1">Where to <em>find me</em></h1>
+  <p class="standfirst veil d2">
+    Code, models, and the occasional email. The fastest way to reach me is the last one.
+  </p>
+
+  <nav class="channels veil d3" aria-label="External links">
+    <a class="channel" href="https://github.com/ShreySharma07" target="_blank" rel="noopener">
+      <span class="cn">GitHub</span>
+      <span class="ch">github.com/ShreySharma07</span>
+      <span class="ca" aria-hidden="true">↗</span>
+    </a>
+    <a class="channel" href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener">
+      <span class="cn">Hugging Face</span>
+      <span class="ch">huggingface.co/ShreySharma07</span>
+      <span class="ca" aria-hidden="true">↗</span>
+    </a>
+    <!-- TODO: swap the href for your real LinkedIn URL -->
+    <a class="channel" href="#" data-todo="linkedin">
+      <span class="cn">LinkedIn</span>
+      <span class="ch">add your URL</span>
+      <span class="ca" aria-hidden="true">↗</span>
+    </a>
+    <a class="channel" href="mailto:shrey7shrey@gmail.com">
+      <span class="cn">Email</span>
+      <span class="ch">shrey7shrey@gmail.com</span>
+      <span class="ca" aria-hidden="true">↗</span>
+    </a>
+  </nav>
+</main>
+
+<footer>
+  <span>Shrey Sharma</span>
+  <span>Bengaluru, India</span>
+</footer>
+
+<script>
+(function(){
+  var v = [].slice.call(document.querySelectorAll('.veil'));
+  requestAnimationFrame(function(){ v.forEach(function(el){ el.classList.add('seen'); }); });
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[data-todo]');
+    if (a) e.preventDefault();
+  });
+})();
+</script>
+</body>
+</html>
