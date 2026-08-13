@@ -225,9 +225,8 @@
             <span class="n">Hugging Face</span><span class="v">huggingface.co/ShreySharma07</span></a>
           <a href="mailto:${MAIL}">
             <span class="n">Email</span><span class="v">${MAIL}</span></a>
-          <!-- TODO: swap in the real LinkedIn URL -->
-          <a href="#" data-todo="linkedin">
-            <span class="n">LinkedIn</span><span class="v">add your URL</span></a>
+          <a href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener">
+            <span class="n">LinkedIn</span><span class="v">linkedin.com/in/shrey-sharma</span></a>
         </div>`
     },
     writing: {
