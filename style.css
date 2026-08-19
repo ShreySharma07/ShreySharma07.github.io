@@ -138,35 +138,108 @@ a{color:inherit}
 
 .set{margin-bottom:3rem}
 
-/* ── project entries ──────────────────────── */
-.work{border-top:1px solid var(--rule)}
-.item{
-  display:grid;grid-template-columns:72px 1fr 180px;gap:2.6rem;
-  padding:3rem 1.2rem 3rem 0;border-bottom:1px solid var(--rule);
-  position:relative;transition:.5s cubic-bezier(.2,.7,.3,1);
+/* ── project cards ────────────────────────────
+   Each card carries its own gradient and the text
+   colour that reads on it, set inline per project:
+     --g1 --g2  gradient stops
+     --fg       foreground on the card
+     --accent   the colour used on its detail page   */
+.deck{display:flex;flex-direction:column;gap:1.5rem}
+.card{
+  display:grid;grid-template-columns:auto 1fr auto;gap:1.9rem;align-items:center;
+  padding:1.9rem 2rem;border-radius:18px;text-decoration:none;color:var(--fg);
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  box-shadow:0 18px 44px -26px var(--g2);
+  transition:transform .45s cubic-bezier(.2,.7,.3,1),box-shadow .45s ease;
 }
-.item::before{
-  content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;
-  background:linear-gradient(90deg,var(--leaf),transparent 60%);
-  transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.2,.7,.3,1);
+.card:hover,.card:focus-visible{transform:translateY(-4px);box-shadow:0 28px 62px -26px var(--g2)}
+.card:focus-visible{outline:2px solid var(--leaf);outline-offset:4px}
+.card-icon{
+  width:98px;height:98px;border-radius:22px;display:grid;place-items:center;
+  background:rgba(14,14,16,.88);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
 }
-.item:hover::before{transform:scaleX(1)}
-.item:hover{padding-left:1.2rem;background:linear-gradient(90deg,rgba(127,224,174,.045),transparent 65%)}
-.item-no{font-family:var(--serif);font-size:1.4rem;color:var(--dimmer);transition:color .5s ease}
-.item:hover .item-no{color:var(--leaf)}
-.item h2{font-family:var(--serif);font-weight:400;font-size:1.6rem;letter-spacing:-.015em;margin-bottom:.8rem}
-.item p{font-family:var(--serif);font-weight:300;font-size:.95rem;line-height:1.9;color:var(--dim);max-width:52ch;margin-bottom:1.1rem}
-.stack{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dimmer)}
-.aside{display:flex;flex-direction:column;gap:.7rem;padding-top:.3rem}
-.aside .yr{font-size:.6rem;letter-spacing:.22em;color:var(--dimmer);margin-bottom:.2rem}
-.aside a{
-  font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
-  text-decoration:none;display:flex;justify-content:space-between;align-items:center;
-  padding-bottom:.4rem;border-bottom:1px solid var(--rule);transition:.35s ease;
+.card-icon svg{width:50px;height:50px}
+.card-title{
+  font-family:var(--serif);font-weight:400;font-size:1.85rem;letter-spacing:-.02em;
+  display:block;margin-bottom:.45rem;
 }
-.aside a::after{content:'↗';opacity:.5;transition:.35s ease}
-.aside a:hover{color:var(--leaf);border-bottom-color:var(--leaf)}
-.aside a:hover::after{opacity:1;transform:translate(2px,-2px)}
+.card-desc{
+  display:block;font-family:var(--serif);font-weight:300;
+  font-size:.95rem;line-height:1.6;opacity:.82;max-width:46ch;
+}
+.card-go{font-size:1.3rem;opacity:.55;transition:transform .4s ease,opacity .4s ease}
+.card:hover .card-go{opacity:1;transform:translateX(4px)}
+
+/* ── project detail ───────────────────────── */
+.back{
+  display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;
+  font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:2.6rem;transition:color .3s ease;
+}
+.back:hover{color:var(--leaf)}
+.back span{font-size:1rem;line-height:1;transition:transform .3s ease}
+.back:hover span{transform:translateX(-3px)}
+
+.hero-card{
+  display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;
+  padding:2.4rem;border-radius:20px;color:var(--fg);
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  box-shadow:0 22px 54px -28px var(--g2);
+}
+.hero-card h1{
+  font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4.4vw,2.6rem);
+  letter-spacing:-.025em;line-height:1.05;margin-bottom:.6rem;
+}
+.hero-card p{font-family:var(--serif);font-weight:300;font-size:1rem;line-height:1.6;opacity:.85;max-width:48ch}
+
+.detail{display:grid;grid-template-columns:1.55fr 1fr;gap:4.5rem;margin-top:4.5rem;align-items:start}
+.detail h2{
+  font-family:var(--serif);font-weight:400;font-size:1.5rem;letter-spacing:-.015em;
+  margin-bottom:1.4rem;color:var(--mist);
+}
+.detail h2+h2{margin-top:0}
+.detail section+section{margin-top:3.4rem}
+.detail p{
+  font-family:var(--serif);font-weight:300;font-size:1rem;line-height:1.9;
+  color:var(--dim);max-width:60ch;margin-bottom:1.1rem;
+}
+.detail p b{color:var(--mist);font-weight:400}
+
+.features{list-style:none;display:flex;flex-direction:column;gap:1.15rem}
+/* the bullet is absolute, not a grid cell — grid would split the inline
+   <b> runs inside each item into separate cells and shred the sentence */
+.features li{
+  position:relative;padding-left:1.6rem;max-width:60ch;
+  font-family:var(--serif);font-weight:300;font-size:.98rem;line-height:1.75;color:var(--dim);
+}
+.features li::before{
+  content:'';position:absolute;left:0;top:.62em;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--accent,var(--leaf));
+}
+.features li b{color:var(--mist);font-weight:400}
+
+.side h2{font-size:1.25rem;margin-bottom:1.1rem}
+.side section+section{margin-top:2.6rem}
+.info-row{
+  display:flex;align-items:center;gap:.75rem;padding:.55rem 0;
+  font-size:.82rem;color:var(--dim);
+}
+.info-row svg{width:15px;height:15px;flex:none;stroke:var(--dimmer)}
+.side a.info-link{
+  display:inline-block;color:var(--accent,var(--leaf));text-decoration:none;
+  font-size:.8rem;overflow-wrap:anywhere;border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.side a.info-link:hover{border-bottom-color:var(--accent,var(--leaf))}
+
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{
+  border:1px solid var(--rule);border-radius:999px;padding:.42rem .85rem;
+  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+  transition:border-color .3s ease,color .3s ease;
+}
+.chip:hover{border-color:var(--bark);color:var(--mist)}
 
 /* ── links page ───────────────────────────── */
 .channels{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
@@ -202,8 +275,14 @@ footer{
 
 @media(max-width:860px){
   .split{grid-template-columns:1fr;gap:3rem}
-  .item{grid-template-columns:44px 1fr;gap:1.4rem;padding-right:0}
-  .aside{grid-column:2;padding-top:0}
+  .card{grid-template-columns:auto 1fr;gap:1.2rem;padding:1.4rem}
+  .card-icon{width:66px;height:66px;border-radius:16px}
+  .card-icon svg{width:34px;height:34px}
+  .card-title{font-size:1.4rem}
+  .card-desc{font-size:.88rem}
+  .card-go{display:none}
+  .hero-card{grid-template-columns:1fr;gap:1.4rem;padding:1.6rem}
+  .detail{grid-template-columns:1fr;gap:3rem;margin-top:3rem}
   .channel{grid-template-columns:1fr auto;gap:1rem}
   .channel .ca{display:none}
   .top nav{gap:1.2rem}

@@ -95,72 +95,60 @@ body{overflow-x:hidden}
     survive contact with real hardware.
   </p>
 
-  <section class="work">
-    <article class="item spring">
-      <div class="item-no">01</div>
-      <div>
-        <h2>Repliq</h2>
-        <p>
-          An autonomous agent platform that turns a screen recording into an
-          executable workflow, driven by a <b>ReAct</b> reason–act–observe loop over
-          LLM planning and iterative tool execution. Credentials sit behind a
-          zero-trust vault — Fernet encryption fronted by OAuth 2.0 — so sandboxed
-          agents never hold a long-lived secret. The MCP-compatible tool layer
-          carries full execution tracing, retry and error handling, and async
-          orchestration through FastAPI.
-        </p>
-        <div class="stack">Python · FastAPI · ReAct · MCP · OAuth 2.0</div>
-      </div>
-      <div class="aside">
-        <div class="yr">AI agent platform</div>
-        <a href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository</a>
-      </div>
-    </article>
+  <section class="deck">
+    <a class="card spring" href="project-karma.html"
+       style="--g1:#f0b429;--g2:#c2760c;--fg:#1c1405">
+      <span class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="5" height="5" rx="1.2" fill="#f0b429"/>
+          <rect x="9.5" y="3" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".55"/>
+          <rect x="16" y="3" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".28"/>
+          <rect x="3" y="9.5" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".55"/>
+          <rect x="9.5" y="9.5" width="5" height="5" rx="1.2" fill="#f0b429"/>
+          <rect x="16" y="9.5" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".55"/>
+          <rect x="3" y="16" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".28"/>
+          <rect x="9.5" y="16" width="5" height="5" rx="1.2" fill="#f0b429" opacity=".55"/>
+          <rect x="16" y="16" width="5" height="5" rx="1.2" fill="#f0b429"/>
+        </svg>
+      </span>
+      <span class="card-text">
+        <span class="card-title">KARMA</span>
+        <span class="card-desc">Five LLM agents that write, test, and tune GPU kernels — 8.99&times; over PyTorch eager on a 6&nbsp;GB consumer card.</span>
+      </span>
+      <span class="card-go" aria-hidden="true">&rsaquo;</span>
+    </a>
 
-    <article class="item spring">
-      <div class="item-no">02</div>
-      <div>
-        <h2>KARMA</h2>
-        <p>
-          A five-agent LLM pipeline — classifier → planner → coder → verifier →
-          reflector — that writes and tunes CUDA kernels under hardware-grounded
-          prompting. It reaches <b>8.99× over PyTorch eager</b> and 1.08× over
-          <b>torch.compile</b> on GPT's GELU kernel, at <b>87.9% of theoretical peak
-          memory bandwidth</b> — on a 6 GB consumer GPU, where prior work needed H100
-          clusters. A deterministic closed-loop harness (compile → 3-seed correctness
-          → determinism gate → interleaved benchmarking) structurally prevents
-          reward-hacking, holding <b>0% false-positive correctness</b> across every
-          reported result. A RAG playbook over ChromaDB moves technique knowledge
-          between kernels: one authored entry lifted agent strategy from 0.26× to
-          1.09× on an identical task, and composing techniques took matmul from
-          0.585× to 0.975× of vendor-tuned cuBLAS.
-        </p>
-        <div class="stack">CUDA · Python · Multi-agent LLM · ChromaDB · RAG</div>
-      </div>
-      <div class="aside">
-        <div class="yr">Kernel optimisation</div>
-        <a href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository</a>
-      </div>
-    </article>
+    <a class="card spring" href="project-repliq.html"
+       style="--g1:#8b5cf6;--g2:#5b21b6;--fg:#ffffff">
+      <span class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M20 12a8 8 0 1 1-2.34-5.66" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/>
+          <path d="M20 3.5V8h-4.5" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="2.6" fill="#a78bfa"/>
+        </svg>
+      </span>
+      <span class="card-text">
+        <span class="card-title">Repliq</span>
+        <span class="card-desc">Turns a screen recording into an executable workflow, run by a ReAct agent behind a zero-trust credential vault.</span>
+      </span>
+      <span class="card-go" aria-hidden="true">&rsaquo;</span>
+    </a>
 
-    <article class="item spring">
-      <div class="item-no">03</div>
-      <div>
-        <h2>Math-Specialized Llama 2</h2>
-        <p>
-          Llama 2 fine-tuned on GSM8K for mathematical reasoning using QLoRA, PEFT,
-          and 8-bit quantization — cutting the GPU memory footprint by <b>70%</b>
-          while reaching a <b>0.83 training loss</b>. Shipped as a Dockerized,
-          production-ready inference pipeline on Hugging Face Spaces, covering the
-          full fine-tune-to-deploy lifecycle.
-        </p>
-        <div class="stack">PyTorch · Llama 2 · QLoRA · PEFT · Docker</div>
-      </div>
-      <div class="aside">
-        <div class="yr">LLM fine-tuning</div>
-        <a href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Hugging Face</a>
-      </div>
-    </article>
+    <a class="card spring" href="project-llama.html"
+       style="--g1:#14b8a6;--g2:#0d6f75;--fg:#04201f">
+      <span class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M3 19c3.5 0 4.5-4 6-8s3-6 5.5-6" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="18.5" cy="6.5" r="2.2" fill="#2dd4bf"/>
+          <path d="M3 21h18" stroke="#2dd4bf" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </span>
+      <span class="card-text">
+        <span class="card-title">Math-Specialized Llama&nbsp;2</span>
+        <span class="card-desc">Llama 2 fine-tuned on GSM8K with QLoRA — 70% less GPU memory, 0.83 training loss, shipped on Spaces.</span>
+      </span>
+      <span class="card-go" aria-hidden="true">&rsaquo;</span>
+    </a>
   </section>
 </main>
 
