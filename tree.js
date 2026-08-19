@@ -46,6 +46,7 @@
     { x1:500, y1:330, x2:500, y2:286, w1:8,  w2:4,   at:[0.56,0.78] },
     { x1:466, y1:466, x2:410, y2:420, w1:6,  w2:2.5, at:[0.62,0.80] },
     { x1:556, y1:424, x2:606, y2:388, w1:6,  w2:2.5, at:[0.66,0.84] },
+    { x1:500, y1:428, x2:486, y2:452, w1:6,  w2:2.5, at:[0.80,0.96] },  // feeds the resume leaf
     { x1:500, y1:604, x2:500, y2:648, w1:7,  w2:4,   at:[-1,0], dies:[0.20,0.40] }, // sprout stem
   ];
 
@@ -55,11 +56,12 @@
     { x:502, y:648, dx: 0.94, dy:-0.36, len:118, wid:60, at:[-1,0], dies:[0.20,0.40] },
 
     /* canopy — diagonal two-lobe arrangement: a large lobe drifting
-       up-right, a smaller one drooping down-left. The three labelled
-       leaves still carry the nav tips. */
+       up-right, a smaller one drooping down-left. The four labelled
+       leaves carry the nav tips. */
     { x:430, y:410, dx:-0.78, dy: 0.63, len:150, wid: 72, at:[0.66,0.86], tip:0 },
     { x:640, y:380, dx: 0.75, dy:-0.66, len:215, wid:118, at:[0.72,0.90], tip:1 },
     { x:560, y:340, dx: 0.55, dy:-0.835,len:195, wid:106, at:[0.78,0.96], tip:2 },
+    { x:484, y:452, dx:-0.42, dy: 0.91, len:172, wid: 82, at:[0.84,1.00], tip:3 },
 
     /* filler */
     { x:450, y:400, dx:-0.62, dy: 0.785,len:105, wid: 48, at:[0.74,0.92] },
