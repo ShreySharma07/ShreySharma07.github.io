@@ -3,189 +3,220 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shrey Sharma</title>
-<meta name="description" content="Shrey Sharma — deep learning engineer."/>
+<title>Shrey Sharma — Applied AI Researcher</title>
+<meta name="description" content="Shrey Sharma builds multi-agent LLM systems and the verification harnesses that keep their numbers honest. KARMA: 8.99× over PyTorch eager on a 6 GB GPU, 0% false-positive correctness."/>
+<meta property="og:title" content="Shrey Sharma — Applied AI Researcher"/>
+<meta property="og:description" content="Multi-agent LLM systems, fine-tuning, and evaluation harnesses — with the baselines attached."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@200;300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<style>
-html,body{background:#000}
-body{overflow-x:hidden}
-
-#stage{height:520vh;position:relative;z-index:10}
-.viewport{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
-
-#canopy{
-  position:absolute;inset:0;width:100%;height:100%;
-  filter:drop-shadow(0 0 5px rgba(255,255,255,.55))
-         drop-shadow(0 0 14px rgba(255,255,255,.20));
-}
-
-/* ── branch labels: binary, pinned to the leaf tips ── */
-.bough{
-  position:absolute;transform:translate(-50%,-50%);
-  opacity:0;pointer-events:none;z-index:30;
-  transition:opacity .8s ease;
-}
-.bough a{
-  text-decoration:none;display:block;padding:.6rem .4rem;
-  outline:none;
-}
-.bits{
-  display:block;width:150px;margin:0 auto;text-align:center;
-  font-family:var(--mono);font-weight:300;font-size:7.5px;line-height:2.1;
-}
-.byte{
-  display:inline-block;width:40px;margin:0 3px;
-  color:rgba(255,255,255,.45);
-  text-shadow:0 0 6px rgba(255,255,255,.3);
-  transition:color .3s ease,text-shadow .3s ease,letter-spacing .3s ease;
-  font-style:normal;font-weight:300;
-}
-.byte.on{
-  color:#fff;letter-spacing:.06em;
-  text-shadow:0 0 16px rgba(255,255,255,.85),0 0 34px rgba(255,255,255,.35);
-}
-.bough a:focus-visible .bits{outline:1px solid rgba(255,255,255,.4);outline-offset:6px}
-
-/* ── name: fixed top-left ── */
-#site-name{
-  position:fixed;top:1.6rem;left:5vw;z-index:60;
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(1.05rem,2.1vw,1.4rem);
-  letter-spacing:-.01em;color:var(--mist);
-  pointer-events:none;
-}
-#site-name em{font-style:italic;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35)}
-
-/* ── music toggle ── */
-#music-toggle{
-  position:fixed;top:1.6rem;right:5vw;z-index:60;
-  width:34px;height:34px;border-radius:50%;
-  border:1px solid var(--rule);background:rgba(255,255,255,.02);
-  color:var(--dim);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:color .3s ease,border-color .3s ease,background .3s ease;
-}
-#music-toggle:hover{color:var(--mist);border-color:var(--bark)}
-#music-toggle svg{width:15px;height:15px}
-#music-toggle .bar{transform-origin:center;transition:transform .4s ease}
-#music-toggle.playing .bar{animation:wave 1s ease-in-out infinite}
-#music-toggle .bar:nth-child(2){animation-delay:.15s}
-#music-toggle .bar:nth-child(3){animation-delay:.3s}
-@keyframes wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
-
-/* ── overlay copy ── */
-.overlay{position:absolute;inset:0;pointer-events:none;z-index:20}
-#intro{
-  position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);
-  text-align:center;width:min(90vw,640px);
-}
-#intro .scroll{
-  font-size:.54rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dimmer);
-  display:inline-flex;align-items:center;gap:.75rem;
-}
-#intro .scroll::after{
-  content:'';width:42px;height:1px;background:var(--dimmer);
-  animation:pull 3.2s ease-in-out infinite;transform-origin:left;
-}
-@keyframes pull{0%,100%{transform:scaleX(.3);opacity:.4}50%{transform:scaleX(1);opacity:1}}
-
-#hint{
-  position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);
-  opacity:0;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--dimmer);
-}
-
-/* JS-off fallback only */
-.noscript-nav{
-  position:relative;z-index:40;display:flex;gap:2rem;justify-content:center;
-  padding:3rem 5vw;background:#000;
-}
-.noscript-nav a{
-  font-family:var(--serif);font-size:1.2rem;color:#fff;text-decoration:none;
-}
-
-@media(max-width:860px){
-  #stage{height:400vh}
-  .bits{width:120px;font-size:6.5px}
-  .byte{width:32px;margin:0 2px}
-}
-</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+</script>
 </head>
 <body>
 
-<div id="site-name">Shrey <em>Sharma</em></div>
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="scrim" aria-hidden="true"></div>
 
-<audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
-<button id="music-toggle" aria-label="Play background music" aria-pressed="false">
-  <svg viewBox="0 0 16 16" fill="none">
-    <rect class="bar" x="1" y="5" width="2.4" height="6" rx="1.2" fill="currentColor"/>
-    <rect class="bar" x="6.8" y="2" width="2.4" height="12" rx="1.2" fill="currentColor"/>
-    <rect class="bar" x="12.6" y="6.5" width="2.4" height="3" rx="1.2" fill="currentColor"/>
-  </svg>
-</button>
-
-<div id="stage">
-  <div class="viewport">
-    <canvas id="canopy" aria-label="A sprout of shifting characters that grows into a tree"></canvas>
-
-    <!-- the navigation. data-code is what gets encoded to binary. -->
-    <div class="bough" data-code="ABOUT">
-      <a href="about.html" aria-label="About Shrey"><span class="bits"></span></a>
-    </div>
-    <div class="bough" data-code="PROJECTS">
-      <a href="projects.html" aria-label="Projects"><span class="bits"></span></a>
-    </div>
-    <div class="bough" data-code="LINKS">
-      <a href="links.html" aria-label="Links"><span class="bits"></span></a>
-    </div>
-    <div class="bough" data-code="RESUME">
-      <a href="resume.pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)"><span class="bits"></span></a>
-    </div>
-
-    <div class="overlay">
-      <div id="intro">
-        <div class="scroll">Scroll to grow</div>
-      </div>
-      <div id="hint">Hover the leaves</div>
-    </div>
-  </div>
-</div>
-
-<noscript>
-  <nav class="noscript-nav">
-    <a href="about.html">About</a>
-    <a href="projects.html">Projects</a>
-    <a href="links.html">Links</a>
-    <a href="resume.pdf">Resume</a>
+<header class="top">
+  <a class="who" href="#top">Shrey Sharma</a>
+  <nav aria-label="Sections">
+    <a href="#approach">Approach</a>
+    <a href="#karma">Work</a>
+    <a href="#now">Now</a>
+    <a href="#contact">Contact</a>
+    <a class="cv" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
   </nav>
-</noscript>
+</header>
 
-<script>
-(function(){
-  var audio = document.getElementById('bg-music');
-  var btn = document.getElementById('music-toggle');
-  function setPlaying(playing){
-    btn.classList.toggle('playing', playing);
-    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-    btn.setAttribute('aria-label', playing ? 'Pause background music' : 'Play background music');
-  }
-  btn.addEventListener('click', function(){
-    if(audio.paused){
-      audio.play().then(function(){
-        setPlaying(true);
-      }).catch(function(){
-        setPlaying(false);
-      });
-    } else {
-      audio.pause();
-      setPlaying(false);
-    }
-  });
-})();
-</script>
-<script src="tree.js"></script>
+<nav class="rail" aria-label="Progress">
+  <a href="#top"      data-dot="hero"     aria-label="Top"></a>
+  <a href="#approach" data-dot="approach" aria-label="Approach"></a>
+  <a href="#karma"    data-dot="karma"    aria-label="KARMA"></a>
+  <a href="#repliq"   data-dot="repliq"   aria-label="Repliq"></a>
+  <a href="#llama"    data-dot="llama"    aria-label="Llama 2"></a>
+  <a href="#now"      data-dot="now"      aria-label="Now"></a>
+  <a href="#contact"  data-dot="contact"  aria-label="Contact"></a>
+</nav>
+
+<main id="top">
+
+  <!-- ─── 0 · hero ─────────────────────────────────────── -->
+  <section class="s hero" data-layout="lattice" id="hero">
+    <div class="col">
+      <p class="eyebrow r">Applied AI Researcher · Bengaluru, India</p>
+      <h1 class="r d1">I build LLM agent systems<br>and <em>measure them honestly.</em></h1>
+      <p class="lead r d2">
+        Multi-agent orchestration, fine-tuning, and the verification harnesses
+        that keep the numbers true. Right now: ablation studies on KernelBench,
+        toward a workshop paper.
+      </p>
+      <div class="cta r d3">
+        <a class="btn" href="#karma">Read the work <span aria-hidden="true">↓</span></a>
+        <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <p class="hint" aria-hidden="true">Scroll — the tensor reshapes to each idea</p>
+  </section>
+
+  <!-- ─── 1 · approach ─────────────────────────────────── -->
+  <section class="s" data-layout="cube" id="approach">
+    <div class="col">
+      <p class="eyebrow r">Approach</p>
+      <h2 class="r d1">Three rules I don't break.</h2>
+      <ol class="rules">
+        <li class="r d2">
+          <span class="n">01</span>
+          <div><b>Baselines, not anecdotes.</b>
+          Every result ships with the baseline it beat and the hardware it ran on.
+          A speedup without its baseline is a story, not a measurement.</div>
+        </li>
+        <li class="r d3">
+          <span class="n">02</span>
+          <div><b>Verification is the product.</b>
+          An agent that grades its own work will learn to cheat the grader. Most of
+          the engineering goes into making that structurally impossible.</div>
+        </li>
+        <li class="r d4">
+          <span class="n">03</span>
+          <div><b>Consumer hardware first.</b>
+          If a method needs an H100 cluster, the method hasn't been found yet.
+          Six gigabytes is the constraint I design against.</div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ─── 2 · KARMA ────────────────────────────────────── -->
+  <section class="s" data-layout="gpu" id="karma">
+    <div class="col">
+      <p class="eyebrow r">01 · Research</p>
+      <h2 class="r d1">KARMA</h2>
+      <p class="lead r d2">
+        Five LLM agents that write, verify, and iterate on GPU kernels —
+        and cannot lie about the result.
+      </p>
+      <dl class="stats r d3">
+        <div><dt>vs PyTorch eager</dt><dd><span data-count="8.99" data-dec="2"></span>×</dd></div>
+        <div><dt>vs torch.compile</dt><dd><span data-count="1.08" data-dec="2"></span>×</dd></div>
+        <div><dt>false-positive correctness</dt><dd><span data-count="0" data-dec="0"></span>%</dd></div>
+        <div><dt>GPU it ran on</dt><dd><span data-count="6" data-dec="0"></span> GB</dd></div>
+      </dl>
+      <div class="body r d4">
+        <p>A five-agent pipeline — <b>classifier → planner → coder → verifier →
+        reflector</b> — under hardware-grounded prompting. The interesting problem
+        was never generating kernels; it was trusting them.</p>
+        <p>So the loop is closed: <b>compile → three-seed correctness → determinism
+        gate → interleaved benchmarking</b>. An agent cannot pass by gaming the
+        benchmark, which is why the false-positive rate is zero rather than low.</p>
+        <p>A RAG memory over ChromaDB carries technique between tasks. One authored
+        entry moved the agent from <b>0.26× to 1.09×</b> on an identical task —
+        in-context learning you can measure across runs. Results that prior work
+        needed H100 clusters to reach, on a 6&nbsp;GB card.</p>
+      </div>
+      <p class="links r d5">
+        <a href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
+        <span class="tag">Workshop paper in progress</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── 3 · Repliq ───────────────────────────────────── -->
+  <section class="s" data-layout="ring" id="repliq">
+    <div class="col">
+      <p class="eyebrow r">02 · Systems</p>
+      <h2 class="r d1">Repliq</h2>
+      <p class="lead r d2">
+        A screen recording becomes an executable workflow. A ReAct agent runs it
+        without ever holding a secret.
+      </p>
+      <div class="body r d3">
+        <p>You demonstrate a task once. The agent reasons about what it saw, acts
+        through real tools, observes the result, and repeats — the
+        <b>Reason–Act–Observe</b> loop, made production-grade.</p>
+        <p>The tool layer is <b>MCP-compatible</b>, with full execution tracing,
+        retry and error handling, and async orchestration through FastAPI. Credentials
+        live in a <b>zero-trust vault</b> — Fernet-encrypted, fronted by OAuth&nbsp;2.0 —
+        so a sandboxed agent never touches a long-lived secret, even mid-run.</p>
+      </div>
+      <p class="links r d4">
+        <a href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── 4 · Llama ────────────────────────────────────── -->
+  <section class="s" data-layout="lora" id="llama">
+    <div class="col">
+      <p class="eyebrow r">03 · Fine-tuning</p>
+      <h2 class="r d1">Math-specialized Llama&nbsp;2</h2>
+      <p class="lead r d2">
+        Llama 2 on GSM8K, trained where it shouldn't have fit.
+      </p>
+      <dl class="stats r d3">
+        <div><dt>GPU memory cut</dt><dd><span data-count="70" data-dec="0"></span>%</dd></div>
+        <div><dt>training loss</dt><dd><span data-count="0.83" data-dec="2"></span></dd></div>
+        <div><dt>quantization</dt><dd>8-bit</dd></div>
+      </dl>
+      <div class="body r d4">
+        <p>The frozen weight matrix stays put. What trains is a low-rank update —
+        two thin slabs whose product is the change — which is what
+        <b>QLoRA with PEFT</b> buys you: a model that would not otherwise fit,
+        made trainable, then made shippable.</p>
+        <p>Deployed as a Dockerized inference pipeline on Hugging Face Spaces.
+        Data preparation, training, evaluation, deployment — one reproducible path,
+        not a notebook.</p>
+      </div>
+      <p class="links r d5">
+        <a href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Model on Hugging Face <span aria-hidden="true">↗</span></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── 5 · Now ──────────────────────────────────────── -->
+  <section class="s" data-layout="horizon" id="now">
+    <div class="col">
+      <p class="eyebrow r">Now</p>
+      <h2 class="r d1">Ablations on KernelBench, toward a workshop paper.</h2>
+      <div class="body r d2">
+        <p>Isolating what actually drives KARMA's numbers — the knowledge base,
+        pre-flight profiling, the reflection agent — one variable at a time.</p>
+        <p>I'm looking for <b>Applied AI Researcher</b> and <b>Research Engineer</b>
+        roles in LLM agents, evaluation, and efficient training — anywhere the
+        question is "does it really work, and how do we know."</p>
+      </div>
+      <dl class="facts r d3">
+        <div><dt>Education</dt><dd>B.Tech, Computer Science (AI specialization) — University of Lucknow, 2022–2026</dd></div>
+        <div><dt>Recognition</dt><dd>Top-5 finalist, IIT Madras Malware Analysis Hackathon — led a four-person team to a deep-learning malware classifier, top 5 of 120+ teams</dd></div>
+        <div><dt>Certified</dt><dd>Google Agentic AI (Kaggle) · UC Berkeley Agentic AI MOOC · Machine &amp; Deep Learning (IBM)</dd></div>
+        <div><dt>Stack</dt><dd>Python · PyTorch · CUDA · Hugging Face Transformers · TRL · ChromaDB · FastAPI · Docker · AWS</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ─── 6 · Contact ──────────────────────────────────── -->
+  <section class="s" data-layout="lattice" id="contact">
+    <div class="col">
+      <p class="eyebrow r">Contact</p>
+      <h2 class="r d1">If the work is interesting,<br><em>write to me.</em></h2>
+      <ul class="channels r d2">
+        <li><a href="mailto:shrey7shrey@gmail.com"><span>Email</span><span>shrey7shrey@gmail.com</span></a></li>
+        <li><a href="https://github.com/ShreySharma07" target="_blank" rel="noopener"><span>GitHub</span><span>ShreySharma07</span></a></li>
+        <li><a href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener"><span>Hugging Face</span><span>ShreySharma07</span></a></li>
+        <li><a href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener"><span>LinkedIn</span><span>shrey-sharma</span></a></li>
+        <li><a href="resume.pdf" target="_blank" rel="noopener"><span>Resume</span><span>PDF</span></a></li>
+      </ul>
+    </div>
+    <footer class="foot r d3">
+      <span>Shrey Sharma · Bengaluru</span>
+      <span>Built with Three.js. The lattice is 1,728 cells — the same ones the whole way down.</span>
+    </footer>
+  </section>
+
+</main>
+
+<script type="module" src="scene.js"></script>
 </body>
 </html>

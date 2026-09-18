@@ -1,41 +1,46 @@
 # Shrey Sharma — portfolio
 
-A static portfolio site. No build step, no dependencies — open `index.html` and it runs.
+One page, one object. A lattice of 1,728 cells — a tensor — that never leaves
+the screen and reshapes itself into whatever the section is about. No build step,
+no bundler: three files and a CDN import.
 
-| Page | What it does |
-|---|---|
-| `index.html` | A sprout of ASCII characters that grows into a tree as you scroll. The three leaf tips are the navigation, labelled in binary until you hover them. |
-| `projects.html` | A four-layer neural network firing signals forward and backward. Scrolling dissolves it into glyph shrapnel, fills the screen with ML/DL vocabulary, then springs the project list up. |
-| `about.html` | A live black hole with a rainbow accretion disk on a white sky. Click the singularity and four stars fall out; click a star to read what it holds. |
-| `links.html` | Where to find me. |
+| Section  | The lattice becomes                              | Why                          |
+|----------|--------------------------------------------------|------------------------------|
+| Hero     | a loose lattice                                  | raw material                 |
+| Approach | a tight solid cube                               | structure, rigor             |
+| KARMA    | a GPU grid with an execution wave sweeping it    | kernels running              |
+| Repliq   | a ring with three pulses circling it             | the reason → act → observe loop |
+| Llama 2  | a frozen matrix plus two thin bright slabs       | W + ΔW — literally LoRA      |
+| Now      | a low horizon with one lit cell moving           | the current work             |
+| Contact  | the loose lattice again                          | bookend                      |
 
-## Layout
+## Files
 
 ```
-index.html      tree.js     the growing tree
-projects.html   net.js      the neural network + word field
-about.html      hole.js     the black hole + stars
-links.html
-style.css                   shared design system for every page
+index.html   the page — all copy lives here
+style.css    type, layout, reveal transitions
+scene.js     the tensor: layouts, scroll blending, per-layout motion (Three.js)
+resume.pdf
 ```
 
-`style.css` holds the palette, type scale, and shared components (header, page shell,
-project entries, link channels). Per-page styles live in a `<style>` block in that page.
+`scene.js` is where the argument is made. Each layout is a function returning
+positions, scales and glow for every cell; `LIVE` gives each layout its motion;
+the frame loop blends between adjacent layouts by scroll position, with a
+per-cell lag so the morph ripples instead of snapping.
 
 ## Running it
 
-Any static server:
+Any static server — the module import needs `http://`, not `file://`.
 
 ```bash
 python3 -m http.server 8000
 # → http://localhost:8000
 ```
 
-Opening the files directly over `file://` mostly works, but a server is closer to production.
+## Dependency
+
+Three.js 0.170 from jsDelivr via an import map in `index.html`. Nothing else.
 
 ## Still to do
 
-- [ ] Add `music.mp3` to this folder — the landing page's audio toggle expects it
-- [ ] Real LinkedIn URL (placeholder in `links.html` and `hole.js`)
-- [ ] Blog posts for the Writing star in `about.html`
-- [ ] Review the "What's next" copy in `hole.js`
+- [ ] Blog / writing links, once there are posts to point at
