@@ -2,221 +2,440 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shrey Sharma — Applied AI Researcher</title>
-<meta name="description" content="Shrey Sharma builds multi-agent LLM systems and the verification harnesses that keep their numbers honest. KARMA: 8.99× over PyTorch eager on a 6 GB GPU, 0% false-positive correctness."/>
-<meta property="og:title" content="Shrey Sharma — Applied AI Researcher"/>
-<meta property="og:description" content="Multi-agent LLM systems, fine-tuning, and evaluation harnesses — with the baselines attached."/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Shrey Sharma</title>
+<meta name="description" content="Shrey Sharma — AI/ML engineer and research engineer. Multi-agent LLM systems, fine-tuning, and evaluation harnesses with measured baselines."/>
+<meta property="og:title" content="Shrey Sharma — AI/ML Engineer · Research Engineer"/>
+<meta property="og:description" content="Multi-agent LLM systems, fine-tuning, and evaluation harnesses, reported with their baselines."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow column, résumé order, cards only where an item is a thing you can open. Floating dock for navigation. */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --sunk: #f6f7f8;
+  --line: #e7e8ea;
+  --ink: #0b0d10;
+  --ink-2: #4b5260;
+  --ink-3: #8a909b;
+  --accent: #3b5bdb;        /* links, live markers */
+  --accent-soft: #edf1fd;
+  --good: #1f9d55;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --r: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0d0f; --surface: #121417; --sunk: #17191d; --line: #24272d;
+    --ink: #eceef1; --ink-2: #a9afba; --ink-3: #6d7380;
+    --accent: #8ea6ff; --accent-soft: #1a2140; --good: #4cc38a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0d0f; --surface: #121417; --sunk: #17191d; --line: #24272d;
+  --ink: #eceef1; --ink-2: #a9afba; --ink-3: #6d7380;
+  --accent: #8ea6ff; --accent-soft: #1a2140; --good: #4cc38a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 15px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 20px; padding-block: 56px 140px; display: grid; gap: 56px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 19px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.sub { font-size: 13px; color: var(--ink-3); margin-top: -10px; }
+.mono { font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--ink-2); }
+
+/* header */
+.head { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: start; }
+.head .tag { font-family: var(--mono); font-size: 13.5px; color: var(--ink-2); margin-top: 6px; max-width: 46ch; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.ib {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+  font: 500 12.5px var(--sans); color: var(--ink-2); text-decoration: none;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.ib:hover, .ib:focus-visible { color: var(--ink); border-color: var(--ink-3); outline: none; }
+.ib svg { width: 15px; height: 15px; }
+.ib.icon { width: 30px; padding: 0; justify-content: center; }
+.mail { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); text-decoration: none; }
+.mail:hover { color: var(--accent); }
+.photo {
+  width: 104px; aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  background: var(--sunk); border: 1px solid var(--line);
+  display: grid; place-items: center;
+  font: 600 28px var(--sans); color: var(--ink-3);
+}
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font: 500 11.5px var(--mono); color: var(--ink-2);
+  background: var(--sunk); border-radius: 4px; padding: 2px 7px;
+}
+.pill {
+  font: 500 11px var(--mono); padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid var(--line); color: var(--ink-2);
+}
+.pill.live { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.pill.live::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--good); margin-right: 6px; vertical-align: 1px; }
+
+/* cards */
+.card {
+  border: 1px solid var(--line); border-radius: var(--r); background: var(--surface);
+  padding: 18px; display: grid; gap: 10px; min-width: 0;
+}
+.card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.card .what { font-size: 13px; color: var(--ink-3); margin-top: -6px; }
+.card .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.more { font: 500 12.5px var(--sans); color: var(--accent); text-decoration: none; white-space: nowrap; }
+.more:hover, .more:focus-visible { text-decoration: underline; text-underline-offset: 3px; outline: none; }
+
+/* numbers that carry the claim */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.stats div { background: var(--sunk); padding: 10px 12px; }
+.stats b { display: block; font: 600 18px var(--sans); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.stats span { font: 400 11px var(--mono); color: var(--ink-3); }
+.stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.pipeline { font: 500 12px var(--mono); color: var(--ink-2); overflow-x: auto; white-space: nowrap; padding: 2px 0; }
+.pipeline i { font-style: normal; color: var(--ink-3); padding: 0 6px; }
+
+/* grids */
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid3 .card { padding: 16px; align-content: start; }
+
+/* list rows (achievements, education) */
+.rows { display: grid; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 18px; background: var(--surface); }
+.row + .row { border-top: 1px solid var(--line); }
+.row .when { font: 500 12px var(--mono); color: var(--ink-3); white-space: nowrap; }
+.row .mono { grid-column: 1 / -1; }
+
+/* skills filter */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 12.5px var(--sans); color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 11px; cursor: pointer;
+}
+.tab span { font: 500 11px var(--mono); color: var(--ink-3); }
+.tab[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tab[aria-pressed="true"] span { color: var(--bg); opacity: .7; }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.skillbox { border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; background: var(--surface); }
+.skillbox .chips { gap: 8px; }
+.skillbox .chip { font-size: 12px; padding: 4px 9px; background: var(--sunk); border: 1px solid var(--line); }
+.skillbox .count { font: 400 12px var(--mono); color: var(--ink-3); text-align: center; }
+
+/* dock */
+.dock {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 10;
+  display: flex; gap: 2px; padding: 5px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line); border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none;
+}
+.dock a, .dock button {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 13px var(--sans); color: var(--ink-2); text-decoration: none;
+  padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+  background: none; border: 0; cursor: pointer;
+}
+.dock svg { width: 15px; height: 15px; }
+.dock a:hover, .dock a:focus-visible, .dock button:hover, .dock button:focus-visible { background: var(--sunk); color: var(--ink); outline: none; }
+.dock a.on { color: var(--ink); background: var(--sunk); }
+
+footer { font: 400 12px var(--mono); color: var(--ink-3); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 20px; }
+
+@media (max-width: 640px) {
+  .wrap { padding-block: 36px 120px; gap: 44px; }
+  .photo { width: 76px; }
+  h1 { font-size: 24px; }
+  .grid3 { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dock .lbl { display: none; }
+  .dock a, .dock button { padding: 9px 11px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
 </head>
 <body>
 
-<canvas id="scene" aria-hidden="true"></canvas>
-<div class="scrim" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.83v1.54h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.63V21h-4V9.75Z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10Z"/></symbol>
+</svg>
 
-<header class="top">
-  <a class="who" href="#top">Shrey Sharma</a>
-  <nav aria-label="Sections">
-    <a href="#approach">Approach</a>
-    <a href="#karma">Work</a>
-    <a href="#now">Now</a>
-    <a href="#contact">Contact</a>
-    <a class="cv" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
-  </nav>
-</header>
+<main class="wrap" id="top">
 
-<nav class="rail" aria-label="Progress">
-  <a href="#top"      data-dot="hero"     aria-label="Top"></a>
-  <a href="#approach" data-dot="approach" aria-label="Approach"></a>
-  <a href="#karma"    data-dot="karma"    aria-label="KARMA"></a>
-  <a href="#repliq"   data-dot="repliq"   aria-label="Repliq"></a>
-  <a href="#llama"    data-dot="llama"    aria-label="Llama 2"></a>
-  <a href="#now"      data-dot="now"      aria-label="Now"></a>
-  <a href="#contact"  data-dot="contact"  aria-label="Contact"></a>
-</nav>
+  <!-- ─── header ─────────────────────────────────────── -->
+  <header class="head">
+    <div>
+      <h1>Shrey Sharma</h1>
+      <p class="tag">AI/ML Engineer · Research Engineer — LLM agents, fine-tuning, evaluation</p>
+      <nav class="links" aria-label="Profiles">
+        <a class="ib icon" href="mailto:shrey7shrey@gmail.com" aria-label="Email"><svg><use href="#i-mail"/></svg></a>
+        <a class="ib icon" href="https://github.com/ShreySharma07" target="_blank" rel="noopener" aria-label="GitHub"><svg><use href="#i-gh"/></svg></a>
+        <a class="ib icon" href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg><use href="#i-in"/></svg></a>
+        <a class="ib" href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener">Hugging Face</a>
+        <a class="ib" href="resume.pdf" target="_blank" rel="noopener"><svg><use href="#i-doc"/></svg>CV</a>
+      </nav>
+      <a class="mail" href="mailto:shrey7shrey@gmail.com">shrey7shrey@gmail.com</a>
+    </div>
+    <div class="photo" id="photo" aria-label="Photo of Shrey Sharma">SS</div>
+  </header>
 
-<main id="top">
+  <!-- ─── about ──────────────────────────────────────── -->
+  <section id="about" aria-labelledby="h-about">
+    <h2 id="h-about">About</h2>
+    <p class="mono">I build multi-agent LLM systems, fine-tuning pipelines, and the evaluation
+      harnesses that keep their numbers honest. I design agent architectures end to end:
+      planning loops, tool-calling layers, RAG memory, and closed-loop verification. Every
+      result I report comes with the baseline it beat and the hardware it ran on. Most of my
+      work runs on a 6&nbsp;GB consumer GPU, on purpose.</p>
+    <p class="mono">Computer Science (AI) graduate from the University of Lucknow, based in
+      Bengaluru. Looking for <b>AI/ML Engineer</b> and <b>Research Engineer</b> roles in applied
+      LLM and agent research.</p>
+  </section>
 
-  <!-- ─── 0 · hero ─────────────────────────────────────── -->
-  <section class="s hero" data-layout="lattice" id="hero">
-    <div class="col">
-      <p class="eyebrow r">Applied AI Researcher · Bengaluru, India</p>
-      <h1 class="r d1">I build LLM agent systems<br>and <em>measure them honestly.</em></h1>
-      <p class="lead r d2">
-        Multi-agent orchestration, fine-tuning, and the verification harnesses
-        that keep the numbers true. Right now: ablation studies on KernelBench,
-        toward a workshop paper.
-      </p>
-      <div class="cta r d3">
-        <a class="btn" href="#karma">Read the work <span aria-hidden="true">↓</span></a>
-        <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
+  <!-- ─── research ───────────────────────────────────── -->
+  <section id="research" aria-labelledby="h-research">
+    <h2 id="h-research">Research</h2>
+    <p class="sub">Current paper work</p>
+
+    <article class="card">
+      <div class="top">
+        <h3>KARMA: Multi-Agent LLM System for Automated GPU Kernel Optimization</h3>
+        <span class="pill live">In preparation</span>
+      </div>
+      <p class="what">Workshop paper · ablation studies on KernelBench</p>
+      <p class="mono">Five LLM agents write, verify, and iterate on GPU kernels. A closed
+        verification loop structurally blocks reward hacking, so every reported speedup is real.
+        The paper isolates what drives the results: the knowledge base, pre-flight profiling,
+        and the reflection agent, one variable at a time.</p>
+      <p class="pipeline" aria-label="Agent pipeline">classifier<i>→</i>planner<i>→</i>coder<i>→</i>verifier<i>→</i>reflector</p>
+      <p class="mono">Each kernel passes compile → three-seed correctness → determinism gate →
+        interleaved benchmarking before it counts. A ChromaDB memory carries technique between
+        tasks: one authored entry moved the agent from <b>0.26× to 1.09×</b> on an identical task.</p>
+      <div class="stats" role="list">
+        <div role="listitem"><b>8.99×</b><span>vs PyTorch eager</span></div>
+        <div role="listitem"><b>1.08×</b><span>vs torch.compile</span></div>
+        <div role="listitem"><b>0%</b><span>false-positive correctness</span></div>
+        <div role="listitem"><b>6 GB</b><span>GPU it ran on</span></div>
+      </div>
+      <div class="foot">
+        <div class="chips"><span class="chip">Multi-Agent Systems</span><span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">ChromaDB</span><span class="chip">Evaluation</span></div>
+        <a class="more" href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository ↗</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── featured projects ──────────────────────────── -->
+  <section id="projects" aria-labelledby="h-projects">
+    <h2 id="h-projects">Featured Projects</h2>
+    <p class="sub">The work I'd walk you through first</p>
+
+    <article class="card">
+      <div class="top"><h3>Repliq</h3><span class="pill">Agent platform</span></div>
+      <p class="what">Autonomous workflow automation from screen recordings</p>
+      <p class="mono">A screen recording becomes an executable workflow. A ReAct agent
+        (reason → act → observe) runs it through an MCP-compatible tool layer with full execution
+        tracing, retries, and async orchestration over FastAPI. Credentials sit in a zero-trust
+        vault (Fernet encryption, OAuth&nbsp;2.0), so a sandboxed agent never holds a
+        long-lived secret.</p>
+      <div class="foot">
+        <div class="chips"><span class="chip">ReAct</span><span class="chip">MCP</span><span class="chip">FastAPI</span><span class="chip">OAuth 2.0</span></div>
+        <a class="more" href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><h3>Math-Specialized Llama 2</h3><span class="pill">Fine-tuning</span></div>
+      <p class="what">Llama 2 on GSM8K with QLoRA</p>
+      <div class="stats three" role="list">
+        <div role="listitem"><b>70%</b><span>less GPU memory</span></div>
+        <div role="listitem"><b>0.83</b><span>training loss</span></div>
+        <div role="listitem"><b>8-bit</b><span>quantization</span></div>
+      </div>
+      <p class="mono">QLoRA and PEFT made a model that would not otherwise fit trainable. It
+        ships as a Dockerized inference pipeline on Hugging Face Spaces: data prep, training,
+        evaluation, and deployment on one reproducible path.</p>
+      <div class="foot">
+        <div class="chips"><span class="chip">QLoRA</span><span class="chip">PEFT</span><span class="chip">TRL</span><span class="chip">Docker</span></div>
+        <a class="more" href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Model on Hugging Face ↗</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── other projects ─────────────────────────────── -->
+  <section id="other" aria-labelledby="h-other">
+    <h2 id="h-other">Other Projects</h2>
+    <div class="grid3">
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/Argus" target="_blank" rel="noopener">Argus ↗</a></h3>
+        <p class="mono">Agentic card-fraud investigation on a TigerGraph knowledge graph (590k
+          transactions, 5,565 closed cases). The graph sets the facts, deterministic code applies
+          the bank's policy, and the LLM weighs the evidence and writes the SAR.</p>
+        <div class="chips"><span class="chip">TigerGraph</span><span class="chip">GraphRAG</span><span class="chip">MCP</span><span class="chip">React</span></div>
+      </article>
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/aws-realtime-fraud-detection" target="_blank" rel="noopener">Real-Time Fraud Detection ↗</a></h3>
+        <p class="mono">Serverless MLOps on AWS: an XGBoost model on SageMaker behind Lambda and API
+          Gateway, a GenAI investigator to explain predictions, human-in-the-loop feedback, and
+          automated retraining with Step Functions.</p>
+        <div class="chips"><span class="chip">SageMaker</span><span class="chip">Lambda</span><span class="chip">Step Functions</span><span class="chip">XGBoost</span></div>
+      </article>
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/speculative_decoding" target="_blank" rel="noopener">Speculative Decoding ↗</a></h3>
+        <p class="mono">A research harness for speculative decoding: decoding runtime, draft-model
+          training, benchmarks, and analysis, with a test-first dev loop that runs on Kaggle GPUs.</p>
+        <div class="chips"><span class="chip">Inference</span><span class="chip">PyTorch</span><span class="chip">Kaggle</span></div>
+        <span class="pill live" style="justify-self:start">Just started</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── achievements ───────────────────────────────── -->
+  <section id="achievements" aria-labelledby="h-ach">
+    <h2 id="h-ach">Achievements &amp; Certifications</h2>
+    <div class="rows">
+      <div class="row">
+        <h3>Top-5 Finalist, IIT Madras Malware Analysis Hackathon</h3>
+        <span class="when">120+ teams</span>
+        <p class="mono">Led a four-person team that built a deep-learning malware classifier and
+          placed in the top 5.</p>
+      </div>
+      <div class="row">
+        <h3>Certifications</h3>
+        <span class="when"></span>
+        <p class="mono">Google Agentic AI (Kaggle) · UC Berkeley Agentic AI MOOC · Machine Learning &amp;
+          Deep Learning (IBM / Coursera)</p>
       </div>
     </div>
-    <p class="hint" aria-hidden="true">Scroll — the tensor reshapes to each idea</p>
   </section>
 
-  <!-- ─── 1 · approach ─────────────────────────────────── -->
-  <section class="s" data-layout="cube" id="approach">
-    <div class="col">
-      <p class="eyebrow r">Approach</p>
-      <h2 class="r d1">Three rules I don't break.</h2>
-      <ol class="rules">
-        <li class="r d2">
-          <span class="n">01</span>
-          <div><b>Baselines, not anecdotes.</b>
-          Every result ships with the baseline it beat and the hardware it ran on.
-          A speedup without its baseline is a story, not a measurement.</div>
-        </li>
-        <li class="r d3">
-          <span class="n">02</span>
-          <div><b>Verification is the product.</b>
-          An agent that grades its own work will learn to cheat the grader. Most of
-          the engineering goes into making that structurally impossible.</div>
-        </li>
-        <li class="r d4">
-          <span class="n">03</span>
-          <div><b>Consumer hardware first.</b>
-          If a method needs an H100 cluster, the method hasn't been found yet.
-          Six gigabytes is the constraint I design against.</div>
-        </li>
-      </ol>
+  <!-- ─── skills ─────────────────────────────────────── -->
+  <section id="skills" aria-labelledby="h-skills">
+    <h2 id="h-skills">Skills</h2>
+    <div class="tabs" id="tabs" role="toolbar" aria-label="Filter skills"></div>
+    <div class="skillbox">
+      <div class="chips" id="skillList" aria-live="polite"></div>
+      <p class="count" id="skillCount"></p>
     </div>
   </section>
 
-  <!-- ─── 2 · KARMA ────────────────────────────────────── -->
-  <section class="s" data-layout="gpu" id="karma">
-    <div class="col">
-      <p class="eyebrow r">01 · Research</p>
-      <h2 class="r d1">KARMA</h2>
-      <p class="lead r d2">
-        Five LLM agents that write, verify, and iterate on GPU kernels —
-        and cannot lie about the result.
-      </p>
-      <dl class="stats r d3">
-        <div><dt>vs PyTorch eager</dt><dd><span data-count="8.99" data-dec="2"></span>×</dd></div>
-        <div><dt>vs torch.compile</dt><dd><span data-count="1.08" data-dec="2"></span>×</dd></div>
-        <div><dt>false-positive correctness</dt><dd><span data-count="0" data-dec="0"></span>%</dd></div>
-        <div><dt>GPU it ran on</dt><dd><span data-count="6" data-dec="0"></span> GB</dd></div>
-      </dl>
-      <div class="body r d4">
-        <p>A five-agent pipeline — <b>classifier → planner → coder → verifier →
-        reflector</b> — under hardware-grounded prompting. The interesting problem
-        was never generating kernels; it was trusting them.</p>
-        <p>So the loop is closed: <b>compile → three-seed correctness → determinism
-        gate → interleaved benchmarking</b>. An agent cannot pass by gaming the
-        benchmark, which is why the false-positive rate is zero rather than low.</p>
-        <p>A RAG memory over ChromaDB carries technique between tasks. One authored
-        entry moved the agent from <b>0.26× to 1.09×</b> on an identical task —
-        in-context learning you can measure across runs. Results that prior work
-        needed H100 clusters to reach, on a 6&nbsp;GB card.</p>
+  <!-- ─── education ──────────────────────────────────── -->
+  <section id="education" aria-labelledby="h-edu">
+    <h2 id="h-edu">Education</h2>
+    <div class="rows">
+      <div class="row">
+        <h3>University of Lucknow</h3>
+        <span class="when">2022 – 2026</span>
+        <p class="mono">B.Tech, Computer Science (AI specialization). Coursework: Machine Learning, Deep
+          Learning, NLP, Linear Algebra, Probability &amp; Statistics, Data Structures &amp; Algorithms.</p>
       </div>
-      <p class="links r d5">
-        <a href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
-        <span class="tag">Workshop paper in progress</span>
-      </p>
     </div>
   </section>
 
-  <!-- ─── 3 · Repliq ───────────────────────────────────── -->
-  <section class="s" data-layout="ring" id="repliq">
-    <div class="col">
-      <p class="eyebrow r">02 · Systems</p>
-      <h2 class="r d1">Repliq</h2>
-      <p class="lead r d2">
-        A screen recording becomes an executable workflow. A ReAct agent runs it
-        without ever holding a secret.
-      </p>
-      <div class="body r d3">
-        <p>You demonstrate a task once. The agent reasons about what it saw, acts
-        through real tools, observes the result, and repeats — the
-        <b>Reason–Act–Observe</b> loop, made production-grade.</p>
-        <p>The tool layer is <b>MCP-compatible</b>, with full execution tracing,
-        retry and error handling, and async orchestration through FastAPI. Credentials
-        live in a <b>zero-trust vault</b> — Fernet-encrypted, fronted by OAuth&nbsp;2.0 —
-        so a sandboxed agent never touches a long-lived secret, even mid-run.</p>
-      </div>
-      <p class="links r d4">
-        <a href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
-      </p>
-    </div>
-  </section>
-
-  <!-- ─── 4 · Llama ────────────────────────────────────── -->
-  <section class="s" data-layout="lora" id="llama">
-    <div class="col">
-      <p class="eyebrow r">03 · Fine-tuning</p>
-      <h2 class="r d1">Math-specialized Llama&nbsp;2</h2>
-      <p class="lead r d2">
-        Llama 2 on GSM8K, trained where it shouldn't have fit.
-      </p>
-      <dl class="stats r d3">
-        <div><dt>GPU memory cut</dt><dd><span data-count="70" data-dec="0"></span>%</dd></div>
-        <div><dt>training loss</dt><dd><span data-count="0.83" data-dec="2"></span></dd></div>
-        <div><dt>quantization</dt><dd>8-bit</dd></div>
-      </dl>
-      <div class="body r d4">
-        <p>The frozen weight matrix stays put. What trains is a low-rank update —
-        two thin slabs whose product is the change — which is what
-        <b>QLoRA with PEFT</b> buys you: a model that would not otherwise fit,
-        made trainable, then made shippable.</p>
-        <p>Deployed as a Dockerized inference pipeline on Hugging Face Spaces.
-        Data preparation, training, evaluation, deployment — one reproducible path,
-        not a notebook.</p>
-      </div>
-      <p class="links r d5">
-        <a href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Model on Hugging Face <span aria-hidden="true">↗</span></a>
-      </p>
-    </div>
-  </section>
-
-  <!-- ─── 5 · Now ──────────────────────────────────────── -->
-  <section class="s" data-layout="horizon" id="now">
-    <div class="col">
-      <p class="eyebrow r">Now</p>
-      <h2 class="r d1">Ablations on KernelBench, toward a workshop paper.</h2>
-      <div class="body r d2">
-        <p>Isolating what actually drives KARMA's numbers — the knowledge base,
-        pre-flight profiling, the reflection agent — one variable at a time.</p>
-        <p>I'm looking for <b>Applied AI Researcher</b> and <b>Research Engineer</b>
-        roles in LLM agents, evaluation, and efficient training — anywhere the
-        question is "does it really work, and how do we know."</p>
-      </div>
-      <dl class="facts r d3">
-        <div><dt>Education</dt><dd>B.Tech, Computer Science (AI specialization) — University of Lucknow, 2022–2026</dd></div>
-        <div><dt>Recognition</dt><dd>Top-5 finalist, IIT Madras Malware Analysis Hackathon — led a four-person team to a deep-learning malware classifier, top 5 of 120+ teams</dd></div>
-        <div><dt>Certified</dt><dd>Google Agentic AI (Kaggle) · UC Berkeley Agentic AI MOOC · Machine &amp; Deep Learning (IBM)</dd></div>
-        <div><dt>Stack</dt><dd>Python · PyTorch · CUDA · Hugging Face Transformers · TRL · ChromaDB · FastAPI · Docker · AWS</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <!-- ─── 6 · Contact ──────────────────────────────────── -->
-  <section class="s" data-layout="lattice" id="contact">
-    <div class="col">
-      <p class="eyebrow r">Contact</p>
-      <h2 class="r d1">If the work is interesting,<br><em>write to me.</em></h2>
-      <ul class="channels r d2">
-        <li><a href="mailto:shrey7shrey@gmail.com"><span>Email</span><span>shrey7shrey@gmail.com</span></a></li>
-        <li><a href="https://github.com/ShreySharma07" target="_blank" rel="noopener"><span>GitHub</span><span>ShreySharma07</span></a></li>
-        <li><a href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener"><span>Hugging Face</span><span>ShreySharma07</span></a></li>
-        <li><a href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener"><span>LinkedIn</span><span>shrey-sharma</span></a></li>
-        <li><a href="resume.pdf" target="_blank" rel="noopener"><span>Resume</span><span>PDF</span></a></li>
-      </ul>
-    </div>
-    <footer class="foot r d3">
-      <span>Shrey Sharma · Bengaluru</span>
-      <span>Built with Three.js. The lattice is 1,728 cells — the same ones the whole way down.</span>
-    </footer>
-  </section>
-
+  <footer>
+    <span>Shrey Sharma · Bengaluru</span>
+    <span>shrey7shrey@gmail.com</span>
+  </footer>
 </main>
 
-<script type="module" src="scene.js"></script>
+<nav class="dock" aria-label="Sections">
+  <a href="#top"><svg aria-hidden="true"><use href="#i-home"/></svg><span class="lbl">Home</span></a>
+  <a href="#research"><svg aria-hidden="true"><use href="#i-flask"/></svg><span class="lbl">Research</span></a>
+  <a href="#projects"><svg aria-hidden="true"><use href="#i-code"/></svg><span class="lbl">Projects</span></a>
+  <a href="#skills"><svg aria-hidden="true"><use href="#i-bolt"/></svg><span class="lbl">Skills</span></a>
+  <a href="#education"><svg aria-hidden="true"><use href="#i-cap"/></svg><span class="lbl">Education</span></a>
+  <button type="button" id="theme" aria-label="Toggle dark mode"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
+</nav>
+
+<script>
+(() => {
+  /* photo: shows assets/photo.jpg once it exists, initials until then */
+  const img = new Image();
+  img.alt = 'Shrey Sharma';
+  img.onload = () => { const p = document.getElementById('photo'); p.textContent = ''; p.appendChild(img); };
+  img.src = 'assets/photo.jpg';
+
+  /* skills, grouped as on the resume */
+  const SKILLS = {
+    'LLM & Agents': ['LLM Fine-Tuning', 'QLoRA', 'LoRA', 'PEFT', 'Quantization', 'RAG', 'Prompt Engineering', 'ReAct Agents', 'Multi-Agent Orchestration', 'Tool Calling', 'MCP', 'Evaluation & Benchmarking'],
+    'ML Frameworks': ['PyTorch', 'TensorFlow', 'Hugging Face Transformers', 'TRL', 'Scikit-learn', 'ChromaDB', 'Google ADK'],
+    'Languages': ['Python', 'C++', 'SQL', 'Java'],
+    'MLOps': ['Docker', 'FastAPI', 'AWS SageMaker', 'AWS Lambda', 'AWS EC2', 'AWS S3', 'MLflow', 'DVC', 'CI/CD', 'Git', 'Linux'],
+    'Foundations': ['Deep Learning', 'NLP', 'Linear Algebra', 'Probability & Statistics', 'Experiment Design', 'Data Structures & Algorithms'],
+  };
+  const all = Object.values(SKILLS).flat();
+  const tabs = document.getElementById('tabs');
+  const list = document.getElementById('skillList');
+  const count = document.getElementById('skillCount');
+  const groups = [['All', all], ...Object.entries(SKILLS)];
+  const show = (name, items) => {
+    list.innerHTML = items.map(s => `<span class="chip">${s.replace(/&/g, '&amp;')}</span>`).join('');
+    count.textContent = `${items.length} ${name === 'All' ? 'skills in total' : 'in ' + name}`;
+    tabs.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', t.dataset.g === name));
+  };
+  groups.forEach(([name, items]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tab'; b.dataset.g = name;
+    b.innerHTML = `${name.replace(/&/g, '&amp;')} <span>${items.length}</span>`;
+    b.addEventListener('click', () => show(name, items));
+    tabs.appendChild(b);
+  });
+  show('All', all);
+
+  /* theme toggle: remembers the choice when storage is available */
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* dock: highlight the section in view */
+  const links = [...document.querySelectorAll('.dock a')];
+  const targets = links.map(a => document.querySelector(a.getAttribute('href')));
+  const spy = () => {
+    let i = 0;
+    targets.forEach((t, k) => { if (t.getBoundingClientRect().top < innerHeight * .4) i = k; });
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true }); spy();
+})();
+</script>
 </body>
 </html>
