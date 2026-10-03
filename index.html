@@ -2,221 +2,376 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shrey Sharma — Applied AI Researcher</title>
-<meta name="description" content="Shrey Sharma builds multi-agent LLM systems and the verification harnesses that keep their numbers honest. KARMA: 8.99× over PyTorch eager on a 6 GB GPU, 0% false-positive correctness."/>
-<meta property="og:title" content="Shrey Sharma — Applied AI Researcher"/>
-<meta property="og:description" content="Multi-agent LLM systems, fine-tuning, and evaluation harnesses — with the baselines attached."/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Shrey Sharma</title>
+<meta name="description" content="Shrey Sharma — applied AI. A sketch by the lake; say hi."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one sheet of paper, full bleed. A pencil sketch fills it; water spreads where the cursor goes. */
+:root {
+  --paper: #fbfaf6;      /* drawing paper, faint warm */
+  --paper-edge: #ece7da; /* vignette at the sheet's edges */
+  --graphite: #2f2d2a;   /* pencil line */
+  --graphite-soft: #6d6962;
+  --wash: #4d6a86;       /* the blue of water soaking into paper */
+  --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  color-scheme: light;
+}
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--graphite);
+  font-family: var(--hand);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* paper grain + edge vignette */
+.paper {
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, var(--paper-edge) 130%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .33  0 0 0 0 .3  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  z-index: 3;
+}
+
+#scene {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  display: block; z-index: 1;
+}
+#wet {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 2;
+  mix-blend-mode: multiply;
+}
+
+/* pencil strokes */
+.ink { fill: none; stroke: var(--graphite); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.ink.thin { stroke-width: 1.2; stroke: var(--graphite-soft); }
+.ink.hatch { stroke-width: 1; stroke: var(--graphite-soft); opacity: .7; }
+.fillink { fill: var(--graphite); stroke: none; }
+
+/* pencil draws itself in on load */
+.draw .ink { stroke-dasharray: 1; stroke-dashoffset: 1; animation: sketch var(--dur, 1.1s) ease-out var(--delay, 0s) forwards; }
+@keyframes sketch { to { stroke-dashoffset: 0; } }
+
+/* layers fade when you meet Shrey */
+.layer { transition: opacity 1.1s ease, filter 1.1s ease; }
+body.met .layer { opacity: 0; filter: blur(2px); pointer-events: none; }
+body.met #sky    { transition-delay: 0s; }
+body.met #house  { transition-delay: .15s; }
+body.met #lake   { transition-delay: .3s; }
+body.met #sitter { transition-delay: 0s; transition-duration: .5s; }
+
+/* the person by the lake */
+#sitter { cursor: pointer; }
+#sitter:focus { outline: none; }
+#sitter:focus-visible .halo { opacity: 1; }
+.halo { fill: none; stroke: var(--wash); stroke-width: 1.4; stroke-dasharray: 4 6; opacity: 0; transition: opacity .3s; }
+#sitter:hover .halo { opacity: .8; }
+.screen-glow { fill: #fff6c9; opacity: .55; animation: flicker 3.2s ease-in-out infinite; }
+@keyframes flicker { 50% { opacity: .85; } }
+.hint { font-family: var(--hand); font-size: 26px; fill: var(--graphite-soft); }
+.hint-g { animation: bob 2.4s ease-in-out infinite; transform-box: fill-box; }
+@keyframes bob { 50% { transform: translateY(-5px); } }
+
+/* standing Shrey, centre stage */
+#meet {
+  position: fixed; inset: 0; z-index: 4;
+  display: grid; place-items: center;
+  padding-inline: 16px;
+  pointer-events: none;
+  opacity: 0; transition: opacity .9s ease .7s;
+}
+body.met #meet { opacity: 1; pointer-events: auto; }
+.stage { position: relative; width: min(420px, 100%); display: grid; justify-items: center; }
+.stage svg { width: min(220px, 52vw); height: auto; overflow: visible; }
+.bubble {
+  position: relative;
+  margin-bottom: 14px;
+  padding: 14px 26px 16px;
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--graphite);
+  transform: scale(.6) rotate(-4deg); transform-origin: 50% 100%;
+  opacity: 0; transition: transform .5s cubic-bezier(.3,1.6,.5,1) 1.5s, opacity .3s ease 1.5s;
+}
+body.met .bubble { transform: scale(1) rotate(-1.5deg); opacity: 1; }
+.bubble svg.outline { position: absolute; inset: -6px -10px -18px; width: calc(100% + 20px); height: calc(100% + 24px); overflow: visible; pointer-events: none; }
+.bubble small { display: block; font-size: .62em; font-weight: 500; color: var(--graphite-soft); margin-top: 4px; }
+.wave-arm { transform-origin: 108px 128px; animation: wave 1.2s ease-in-out 1.8s 3; }
+@keyframes wave { 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
+
+.back {
+  position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5;
+  font: 600 22px var(--hand); color: var(--graphite-soft);
+  background: none; border: 0; cursor: pointer; padding: 6px 8px;
+  opacity: 0; pointer-events: none; transition: opacity .5s ease 1.6s;
+}
+body.met .back { opacity: 1; pointer-events: auto; }
+.back:hover, .back:focus-visible { color: var(--graphite); text-decoration: underline wavy; outline: none; }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .draw .ink { animation: none; stroke-dashoffset: 0; }
+  .hint-g, .screen-glow, .wave-arm { animation: none; }
+}
+</style>
 </head>
 <body>
 
-<canvas id="scene" aria-hidden="true"></canvas>
-<div class="scrim" aria-hidden="true"></div>
+<h1 class="sr">Shrey Sharma</h1>
 
-<header class="top">
-  <a class="who" href="#top">Shrey Sharma</a>
-  <nav aria-label="Sections">
-    <a href="#approach">Approach</a>
-    <a href="#karma">Work</a>
-    <a href="#now">Now</a>
-    <a href="#contact">Contact</a>
-    <a class="cv" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
-  </nav>
-</header>
+<svg id="scene" class="draw" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Pencil sketch: a house on the left, a lake on the right, and a person sitting by the water with a laptop.">
+  <defs>
+    <!-- hand-drawn wobble: nudges every stroke a little off true -->
+    <filter id="pencil" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2"/>
+    </filter>
+  </defs>
 
-<nav class="rail" aria-label="Progress">
-  <a href="#top"      data-dot="hero"     aria-label="Top"></a>
-  <a href="#approach" data-dot="approach" aria-label="Approach"></a>
-  <a href="#karma"    data-dot="karma"    aria-label="KARMA"></a>
-  <a href="#repliq"   data-dot="repliq"   aria-label="Repliq"></a>
-  <a href="#llama"    data-dot="llama"    aria-label="Llama 2"></a>
-  <a href="#now"      data-dot="now"      aria-label="Now"></a>
-  <a href="#contact"  data-dot="contact"  aria-label="Contact"></a>
-</nav>
+  <g filter="url(#pencil)">
 
-<main id="top">
+  <!-- ─── sky ─────────────────────────────── -->
+  <g id="sky" class="layer">
+    <circle class="ink" pathLength="1" cx="1330" cy="170" r="52" style="--delay:1.6s"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.9s" d="M1300 140 l28 -18 M1294 162 l48 -32 M1293 186 l62 -42 M1302 204 l58 -40 M1320 216 l40 -28"/>
+    <path class="ink thin" pathLength="1" style="--delay:1.4s;--dur:1.6s" d="M180 150 q20 -30 55 -18 q15 -32 55 -20 q35 -10 45 22 q35 4 25 30 q-10 14 -40 10 l-130 0 q-30 -2 -24 -16 q4 -10 14 -8 Z"/>
+    <path class="ink thin" pathLength="1" style="--delay:1.7s;--dur:1.6s" d="M820 110 q14 -22 42 -14 q14 -26 46 -14 q30 -6 34 18 q26 4 18 22 q-8 10 -30 8 l-100 0 q-22 -2 -18 -12 q4 -8 8 -8 Z"/>
+    <path class="ink thin" pathLength="1" style="--delay:2.2s" d="M1040 240 q8 -8 16 0 q8 -8 16 0 M1090 220 q6 -6 12 0 q6 -6 12 0 M1004 262 q5 -5 10 0 q5 -5 10 0"/>
+  </g>
 
-  <!-- ─── 0 · hero ─────────────────────────────────────── -->
-  <section class="s hero" data-layout="lattice" id="hero">
-    <div class="col">
-      <p class="eyebrow r">Applied AI Researcher · Bengaluru, India</p>
-      <h1 class="r d1">I build LLM agent systems<br>and <em>measure them honestly.</em></h1>
-      <p class="lead r d2">
-        Multi-agent orchestration, fine-tuning, and the verification harnesses
-        that keep the numbers true. Right now: ablation studies on KernelBench,
-        toward a workshop paper.
-      </p>
-      <div class="cta r d3">
-        <a class="btn" href="#karma">Read the work <span aria-hidden="true">↓</span></a>
-        <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
-      </div>
+  <!-- ─── house + tree ────────────────────── -->
+  <g id="house" class="layer">
+    <!-- ground -->
+    <path class="ink" pathLength="1" style="--delay:0s;--dur:1.4s" d="M40 602 C200 598 420 606 620 600 S760 598 790 604"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.2s" d="M70 612 l4 -10 M110 616 l3 -9 M150 610 l5 -11 M560 614 l4 -10 M600 610 l3 -9 M640 616 l4 -10 M690 612 l3 -9 M730 615 l5 -10"/>
+    <!-- walls -->
+    <path class="ink" pathLength="1" style="--delay:.2s" d="M210 600 L212 382 L520 380 L522 600"/>
+    <!-- roof -->
+    <path class="ink" pathLength="1" style="--delay:.4s" d="M184 386 L364 236 L548 384 Z"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.1s;--dur:1.4s" d="M230 370 L364 258 M262 372 L372 280 M296 372 L384 298 M330 372 L398 316 M366 372 L414 332 M402 372 L432 348 M438 372 L452 362"/>
+    <!-- chimney -->
+    <path class="ink" pathLength="1" style="--delay:.6s" d="M448 312 L448 262 L482 262 L482 340"/>
+    <path class="ink thin" pathLength="1" style="--delay:2.1s;--dur:2s" d="M466 252 q-14 -16 4 -30 q18 -14 0 -32 q-16 -16 6 -34"/>
+    <!-- door -->
+    <path class="ink" pathLength="1" style="--delay:.8s" d="M334 600 L334 486 Q364 470 394 486 L394 600"/>
+    <circle class="fillink" cx="384" cy="546" r="3"/>
+    <!-- windows -->
+    <path class="ink" pathLength="1" style="--delay:.9s" d="M244 420 h62 v56 h-62 Z M275 420 v56 M244 448 h62"/>
+    <path class="ink" pathLength="1" style="--delay:1s" d="M424 420 h62 v56 h-62 Z M455 420 v56 M424 448 h62"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.3s" d="M212 560 l20 -20 M212 584 l36 -36 M226 598 l30 -30 M486 598 l34 -34 M504 598 l16 -16"/>
+    <!-- path to the door -->
+    <path class="ink thin" pathLength="1" style="--delay:1.4s" d="M340 604 C330 640 300 680 270 720 M390 604 C400 640 420 680 450 720"/>
+    <!-- tree -->
+    <path class="ink" pathLength="1" style="--delay:.7s" d="M640 600 C644 560 638 520 646 470 M660 600 C656 560 664 520 656 470"/>
+    <path class="ink" pathLength="1" style="--delay:1s;--dur:1.6s" d="M650 476 C590 482 572 430 600 404 C580 360 620 320 656 334 C676 300 730 314 728 352 C760 372 750 430 712 440 C704 474 672 484 650 476 Z"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.5s" d="M612 420 q12 -6 18 4 M640 380 q12 -6 18 4 M676 400 q12 -6 18 4 M700 360 q10 -5 16 3 M660 446 q12 -6 18 4"/>
+  </g>
+
+  <!-- ─── lake ────────────────────────────── -->
+  <g id="lake" class="layer">
+    <!-- far hills -->
+    <path class="ink thin" pathLength="1" style="--delay:.5s;--dur:1.8s" d="M1000 548 C1030 500 1050 490 1080 470 C1160 440 1240 510 1320 486 C1400 462 1480 500 1600 480"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.6s" d="M1090 488 l-14 22 M1110 482 l-20 30 M1130 478 l-22 34 M1300 500 l-12 20 M1320 494 l-16 26"/>
+    <!-- shoreline -->
+    <path class="ink" pathLength="1" style="--delay:.3s;--dur:1.6s" d="M790 604 C840 596 880 580 960 572 C1120 560 1400 566 1600 570"/>
+    <path class="ink" pathLength="1" style="--delay:.6s;--dur:1.6s" d="M960 640 C900 660 870 700 900 740 C940 790 1100 830 1300 840 C1420 846 1520 840 1600 830"/>
+    <!-- water lines -->
+    <path class="ink thin" pathLength="1" style="--delay:1.2s" d="M1040 600 q20 -6 40 0 t40 0 M1240 590 q20 -6 40 0 t40 0 t40 0 M1100 650 q24 -6 48 0 t48 0 M1380 640 q20 -6 40 0 t40 0 M990 700 q20 -6 40 0 t40 0 M1200 720 q24 -6 48 0 t48 0 t48 0 M1450 700 q20 -6 40 0 M1060 780 q20 -6 40 0 t40 0"/>
+    <!-- reflection of the sun -->
+    <path class="ink hatch" pathLength="1" style="--delay:2s" d="M1310 610 h44 M1300 626 h62 M1316 642 h34 M1308 658 h46"/>
+    <!-- reeds -->
+    <path class="ink" pathLength="1" style="--delay:1.3s" d="M1006 640 C1004 610 1010 590 1000 566 M1018 642 C1020 610 1028 596 1036 576 M994 646 C988 624 978 610 970 600"/>
+    <path class="ink" pathLength="1" style="--delay:1.5s" d="M998 566 q-4 -14 2 -24 q8 10 -2 24 M1034 578 q0 -14 8 -22 q6 12 -8 22"/>
+    <!-- small boat -->
+    <path class="ink" pathLength="1" style="--delay:1.8s" d="M1180 676 L1260 676 L1244 692 L1196 692 Z M1220 676 L1220 632 L1248 670"/>
+  </g>
+
+  <!-- ─── the person by the lake ──────────── -->
+  <g id="sitter" class="layer" tabindex="0" role="button" aria-label="Say hi to Shrey">
+   <g transform="translate(876 616) scale(1.4) translate(-876 -616)">
+    <rect x="800" y="470" width="170" height="160" fill="transparent"/>
+    <ellipse class="halo" cx="878" cy="560" rx="78" ry="74"/>
+    <!-- rock he sits on -->
+    <path class="ink" pathLength="1" style="--delay:.9s" d="M838 616 C836 596 852 588 876 588 C902 588 916 598 914 616"/>
+    <path class="ink hatch" pathLength="1" style="--delay:1.4s" d="M846 612 l10 -12 M860 614 l12 -14 M878 614 l12 -14 M896 614 l10 -12"/>
+    <!-- head + hair -->
+    <circle class="ink" pathLength="1" style="--delay:1.2s" cx="862" cy="508" r="15"/>
+    <path class="ink" pathLength="1" style="--delay:1.4s" d="M848 502 q6 -16 22 -12 q8 2 8 10 M850 498 q2 -8 10 -10"/>
+    <!-- torso, leaning toward the laptop -->
+    <path class="ink" pathLength="1" style="--delay:1.4s" d="M860 523 C858 548 862 570 870 590"/>
+    <!-- legs: thigh forward, shin down to the shore -->
+    <path class="ink" pathLength="1" style="--delay:1.6s" d="M870 590 L912 584 L920 620 M868 592 L906 592 L912 622"/>
+    <!-- arms to keyboard -->
+    <path class="ink" pathLength="1" style="--delay:1.7s" d="M861 538 C870 556 884 568 904 574 M862 542 C868 562 880 574 898 580"/>
+    <!-- laptop -->
+    <polygon class="screen-glow" points="918,576 932,546 942,548 930,578"/>
+    <path class="ink" pathLength="1" style="--delay:1.9s" d="M886 580 L930 578 L944 546"/>
+    <!-- hint -->
+    <g class="hint-g">
+      <text class="hint" x="930" y="474">psst… say hi</text>
+      <path class="ink thin" pathLength="1" style="--delay:2.4s" d="M936 482 C922 492 908 492 896 496 M896 496 l10 -8 M896 496 l12 4"/>
+    </g>
+   </g>
+  </g>
+
+  </g>
+</svg>
+
+<canvas id="wet" aria-hidden="true"></canvas>
+<div class="paper" aria-hidden="true"></div>
+
+<!-- ─── centre stage ─────────────────────── -->
+<section id="meet" aria-live="polite">
+  <div class="stage">
+    <div class="bubble">
+      <svg class="outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ink" vector-effect="non-scaling-stroke" filter="url(#pencil)"
+              d="M8 6 C30 2 72 3 94 7 C99 30 99 58 95 78 C78 82 62 82 52 81 L42 98 L40 81 C26 82 14 81 6 78 C2 56 2 26 8 6 Z"/>
+      </svg>
+      hey, I'm Shrey —<br>ask me anything
+      <small>(the asking part arrives next)</small>
     </div>
-    <p class="hint" aria-hidden="true">Scroll — the tensor reshapes to each idea</p>
-  </section>
+    <svg viewBox="0 0 200 320" aria-hidden="true">
+      <g filter="url(#pencil)">
+        <circle class="ink" cx="100" cy="60" r="28"/>
+        <path class="ink" d="M73 52 q8 -30 38 -26 q18 4 18 22 M76 46 q6 -14 20 -18"/>
+        <path class="ink" d="M90 70 q10 8 20 0"/>
+        <circle class="fillink" cx="90" cy="58" r="2.6"/>
+        <circle class="fillink" cx="110" cy="58" r="2.6"/>
+        <path class="ink" d="M100 88 C98 140 100 180 100 210"/>
+        <path class="ink" d="M100 210 L78 300 M100 210 L124 300"/>
+        <path class="ink" d="M78 300 l-14 2 M124 300 l14 2"/>
+        <path class="ink" d="M100 128 C84 150 74 170 70 196"/>
+        <!-- laptop tucked under the left arm -->
+        <path class="ink thin" d="M58 172 l34 10 l-6 22 l-34 -10 Z"/>
+        <g class="wave-arm">
+          <path class="ink" d="M100 128 C118 118 132 100 142 76"/>
+          <path class="ink" d="M142 76 l-6 -12 M142 76 l2 -14 M142 76 l8 -10"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+</section>
 
-  <!-- ─── 1 · approach ─────────────────────────────────── -->
-  <section class="s" data-layout="cube" id="approach">
-    <div class="col">
-      <p class="eyebrow r">Approach</p>
-      <h2 class="r d1">Three rules I don't break.</h2>
-      <ol class="rules">
-        <li class="r d2">
-          <span class="n">01</span>
-          <div><b>Baselines, not anecdotes.</b>
-          Every result ships with the baseline it beat and the hardware it ran on.
-          A speedup without its baseline is a story, not a measurement.</div>
-        </li>
-        <li class="r d3">
-          <span class="n">02</span>
-          <div><b>Verification is the product.</b>
-          An agent that grades its own work will learn to cheat the grader. Most of
-          the engineering goes into making that structurally impossible.</div>
-        </li>
-        <li class="r d4">
-          <span class="n">03</span>
-          <div><b>Consumer hardware first.</b>
-          If a method needs an H100 cluster, the method hasn't been found yet.
-          Six gigabytes is the constraint I design against.</div>
-        </li>
-      </ol>
-    </div>
-  </section>
+<button class="back" type="button" id="back">← back to the lake</button>
 
-  <!-- ─── 2 · KARMA ────────────────────────────────────── -->
-  <section class="s" data-layout="gpu" id="karma">
-    <div class="col">
-      <p class="eyebrow r">01 · Research</p>
-      <h2 class="r d1">KARMA</h2>
-      <p class="lead r d2">
-        Five LLM agents that write, verify, and iterate on GPU kernels —
-        and cannot lie about the result.
-      </p>
-      <dl class="stats r d3">
-        <div><dt>vs PyTorch eager</dt><dd><span data-count="8.99" data-dec="2"></span>×</dd></div>
-        <div><dt>vs torch.compile</dt><dd><span data-count="1.08" data-dec="2"></span>×</dd></div>
-        <div><dt>false-positive correctness</dt><dd><span data-count="0" data-dec="0"></span>%</dd></div>
-        <div><dt>GPU it ran on</dt><dd><span data-count="6" data-dec="0"></span> GB</dd></div>
-      </dl>
-      <div class="body r d4">
-        <p>A five-agent pipeline — <b>classifier → planner → coder → verifier →
-        reflector</b> — under hardware-grounded prompting. The interesting problem
-        was never generating kernels; it was trusting them.</p>
-        <p>So the loop is closed: <b>compile → three-seed correctness → determinism
-        gate → interleaved benchmarking</b>. An agent cannot pass by gaming the
-        benchmark, which is why the false-positive rate is zero rather than low.</p>
-        <p>A RAG memory over ChromaDB carries technique between tasks. One authored
-        entry moved the agent from <b>0.26× to 1.09×</b> on an identical task —
-        in-context learning you can measure across runs. Results that prior work
-        needed H100 clusters to reach, on a 6&nbsp;GB card.</p>
-      </div>
-      <p class="links r d5">
-        <a href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
-        <span class="tag">Workshop paper in progress</span>
-      </p>
-    </div>
-  </section>
+<script>
+(() => {
+  const body = document.body;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  <!-- ─── 3 · Repliq ───────────────────────────────────── -->
-  <section class="s" data-layout="ring" id="repliq">
-    <div class="col">
-      <p class="eyebrow r">02 · Systems</p>
-      <h2 class="r d1">Repliq</h2>
-      <p class="lead r d2">
-        A screen recording becomes an executable workflow. A ReAct agent runs it
-        without ever holding a secret.
-      </p>
-      <div class="body r d3">
-        <p>You demonstrate a task once. The agent reasons about what it saw, acts
-        through real tools, observes the result, and repeats — the
-        <b>Reason–Act–Observe</b> loop, made production-grade.</p>
-        <p>The tool layer is <b>MCP-compatible</b>, with full execution tracing,
-        retry and error handling, and async orchestration through FastAPI. Credentials
-        live in a <b>zero-trust vault</b> — Fernet-encrypted, fronted by OAuth&nbsp;2.0 —
-        so a sandboxed agent never touches a long-lived secret, even mid-run.</p>
-      </div>
-      <p class="links r d4">
-        <a href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository <span aria-hidden="true">↗</span></a>
-      </p>
-    </div>
-  </section>
+  /* ── portrait screens: show the whole scene instead of cropping it ── */
+  const scene = document.getElementById('scene');
+  const fit = () => {
+    const portrait = innerWidth / innerHeight < 1.1;
+    scene.setAttribute('viewBox', portrait ? '140 90 1360 760' : '0 0 1600 900');
+    scene.setAttribute('preserveAspectRatio', portrait ? 'xMidYMid meet' : 'xMidYMid slice');
+  };
+  fit(); addEventListener('resize', fit);
 
-  <!-- ─── 4 · Llama ────────────────────────────────────── -->
-  <section class="s" data-layout="lora" id="llama">
-    <div class="col">
-      <p class="eyebrow r">03 · Fine-tuning</p>
-      <h2 class="r d1">Math-specialized Llama&nbsp;2</h2>
-      <p class="lead r d2">
-        Llama 2 on GSM8K, trained where it shouldn't have fit.
-      </p>
-      <dl class="stats r d3">
-        <div><dt>GPU memory cut</dt><dd><span data-count="70" data-dec="0"></span>%</dd></div>
-        <div><dt>training loss</dt><dd><span data-count="0.83" data-dec="2"></span></dd></div>
-        <div><dt>quantization</dt><dd>8-bit</dd></div>
-      </dl>
-      <div class="body r d4">
-        <p>The frozen weight matrix stays put. What trains is a low-rank update —
-        two thin slabs whose product is the change — which is what
-        <b>QLoRA with PEFT</b> buys you: a model that would not otherwise fit,
-        made trainable, then made shippable.</p>
-        <p>Deployed as a Dockerized inference pipeline on Hugging Face Spaces.
-        Data preparation, training, evaluation, deployment — one reproducible path,
-        not a notebook.</p>
-      </div>
-      <p class="links r d5">
-        <a href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Model on Hugging Face <span aria-hidden="true">↗</span></a>
-      </p>
-    </div>
-  </section>
+  /* ── meet / leave ── */
+  const sitter = document.getElementById('sitter');
+  const meet = () => body.classList.add('met');
+  const leave = () => body.classList.remove('met');
+  sitter.addEventListener('click', meet);
+  sitter.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); meet(); } });
+  document.getElementById('back').addEventListener('click', leave);
+  addEventListener('keydown', e => { if (e.key === 'Escape') leave(); });
 
-  <!-- ─── 5 · Now ──────────────────────────────────────── -->
-  <section class="s" data-layout="horizon" id="now">
-    <div class="col">
-      <p class="eyebrow r">Now</p>
-      <h2 class="r d1">Ablations on KernelBench, toward a workshop paper.</h2>
-      <div class="body r d2">
-        <p>Isolating what actually drives KARMA's numbers — the knowledge base,
-        pre-flight profiling, the reflection agent — one variable at a time.</p>
-        <p>I'm looking for <b>Applied AI Researcher</b> and <b>Research Engineer</b>
-        roles in LLM agents, evaluation, and efficient training — anywhere the
-        question is "does it really work, and how do we know."</p>
-      </div>
-      <dl class="facts r d3">
-        <div><dt>Education</dt><dd>B.Tech, Computer Science (AI specialization) — University of Lucknow, 2022–2026</dd></div>
-        <div><dt>Recognition</dt><dd>Top-5 finalist, IIT Madras Malware Analysis Hackathon — led a four-person team to a deep-learning malware classifier, top 5 of 120+ teams</dd></div>
-        <div><dt>Certified</dt><dd>Google Agentic AI (Kaggle) · UC Berkeley Agentic AI MOOC · Machine &amp; Deep Learning (IBM)</dd></div>
-        <div><dt>Stack</dt><dd>Python · PyTorch · CUDA · Hugging Face Transformers · TRL · ChromaDB · FastAPI · Docker · AWS</dd></div>
-      </dl>
-    </div>
-  </section>
+  /* ── water on paper ──
+     Each drop soaks outward with a ragged edge, leaves a darker tide-line
+     at its rim (how real wet paper looks), then dries and disappears. */
+  const cv = document.getElementById('wet');
+  const ctx = cv.getContext('2d');
+  let W, H, dpr;
+  const size = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+  };
+  size(); addEventListener('resize', size);
 
-  <!-- ─── 6 · Contact ──────────────────────────────────── -->
-  <section class="s" data-layout="lattice" id="contact">
-    <div class="col">
-      <p class="eyebrow r">Contact</p>
-      <h2 class="r d1">If the work is interesting,<br><em>write to me.</em></h2>
-      <ul class="channels r d2">
-        <li><a href="mailto:shrey7shrey@gmail.com"><span>Email</span><span>shrey7shrey@gmail.com</span></a></li>
-        <li><a href="https://github.com/ShreySharma07" target="_blank" rel="noopener"><span>GitHub</span><span>ShreySharma07</span></a></li>
-        <li><a href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener"><span>Hugging Face</span><span>ShreySharma07</span></a></li>
-        <li><a href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener"><span>LinkedIn</span><span>shrey-sharma</span></a></li>
-        <li><a href="resume.pdf" target="_blank" rel="noopener"><span>Resume</span><span>PDF</span></a></li>
-      </ul>
-    </div>
-    <footer class="foot r d3">
-      <span>Shrey Sharma · Bengaluru</span>
-      <span>Built with Three.js. The lattice is 1,728 cells — the same ones the whole way down.</span>
-    </footer>
-  </section>
+  const drops = [];
+  const LIFE = 2600, N = 28;
+  let last = null;
 
-</main>
+  const spawn = (x, y, big) => {
+    const r = (big ? 26 : 12 + Math.random() * 16) * dpr;
+    const p1 = Math.random() * 6.3, p2 = Math.random() * 6.3;
+    const edge = Array.from({ length: N }, (_, i) => {
+      const a = i / N * Math.PI * 2;
+      return 1 + 0.12 * Math.sin(a * 2 + p1) + 0.06 * Math.sin(a * 5 + p2) + 0.025 * (Math.random() - .5);
+    });
+    drops.push({ x: x * dpr, y: y * dpr, r, edge, t0: performance.now(), rot: Math.random() * 6.3 });
+    if (drops.length > 160) drops.shift();
+  };
 
-<script type="module" src="scene.js"></script>
+  const onMove = e => {
+    if (body.classList.contains('met')) return;
+    const x = e.clientX, y = e.clientY;
+    if (!last) { last = { x, y }; spawn(x, y); return; }
+    const d = Math.hypot(x - last.x, y - last.y);
+    const step = reduced ? 60 : 16;
+    if (d >= step) {
+      const n = Math.floor(d / step);
+      for (let i = 1; i <= n; i++)
+        spawn(last.x + (x - last.x) * i / n + (Math.random() - .5) * 6,
+              last.y + (y - last.y) * i / n + (Math.random() - .5) * 6);
+      last = { x, y };
+    }
+  };
+  addEventListener('pointermove', onMove, { passive: true });
+  addEventListener('pointerdown', e => { if (!body.classList.contains('met')) spawn(e.clientX, e.clientY, true); });
+  addEventListener('pointerleave', () => last = null);
+
+  const shape = (d, rr) => {
+    const pt = i => {
+      const a = d.rot + (i / N) * Math.PI * 2, k = d.edge[i % N] * rr;
+      return [d.x + Math.cos(a) * k, d.y + Math.sin(a) * k];
+    };
+    ctx.beginPath();
+    let [ax, ay] = pt(0), [bx, by] = pt(1);
+    ctx.moveTo((ax + bx) / 2, (ay + by) / 2);
+    for (let i = 1; i <= N; i++) {
+      const [cx, cy] = pt(i + 1), [px, py] = pt(i);
+      ctx.quadraticCurveTo(px, py, (px + cx) / 2, (py + cy) / 2);
+    }
+    ctx.closePath();
+  };
+
+  const frame = now => {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+      const t = (now - d.t0) / LIFE;
+      if (t >= 1) { drops.splice(i, 1); continue; }
+      const spread = 1 + 0.55 * (1 - Math.pow(1 - Math.min(t * 1.6, 1), 3));
+      const fade = t < .35 ? 1 : 1 - (t - .35) / .65;
+      const rr = d.r * spread;
+      // soaked body: slightly darker, faintly blue, densest at the rim
+      const g = ctx.createRadialGradient(d.x, d.y, rr * .1, d.x, d.y, rr * 1.1);
+      g.addColorStop(0, `rgba(77,106,134,${.05 * fade})`);
+      g.addColorStop(.75, `rgba(77,106,134,${.09 * fade})`);
+      g.addColorStop(1, `rgba(60,82,104,${.16 * fade})`);
+      shape(d, rr); ctx.fillStyle = g; ctx.fill();
+      // tide-line
+      ctx.lineWidth = 1.1 * dpr;
+      ctx.strokeStyle = `rgba(52,72,92,${.22 * fade})`;
+      ctx.stroke();
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
