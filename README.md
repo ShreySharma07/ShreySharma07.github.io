@@ -1,13 +1,14 @@
 # Shrey Sharma — portfolio
 
-An oil painting of a cottage and a lake, with me on a rock by the water with a
-laptop. Drag the cursor across it and the paint smears like it is still wet,
-then settles. Click me by the lake and the painting dissolves into a portrait
-that says hi.
+A single-column résumé site: about, research, projects, achievements, skills,
+education, with a floating section dock and light/dark themes.
 
-`index.html` holds everything: a WebGL fragment shader draws the painting and
-the wet-paint smear, with a plain `<img>` fallback when WebGL is unavailable.
-The images are in `assets/`. No build step and no libraries.
+Everything is in `index.html`. No build step, no libraries.
+
+- **Photo:** drop a square headshot at `assets/photo.jpg`; until then the
+  header shows initials.
+- **Skills:** edit the `SKILLS` object at the bottom of `index.html`; the filter
+  tabs and counts follow from it.
 
 ## Running it
 
@@ -18,6 +19,5 @@ python3 -m http.server 8000
 
 ## Next
 
-- [ ] "Ask me anything": the chat behind the greeting
-- [ ] Projects (from GitHub) and writing
-- [ ] New headline
+- [ ] Headshot
+- [ ] Blog posts section

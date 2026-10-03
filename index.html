@@ -4,351 +4,437 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Shrey Sharma</title>
-<meta name="description" content="Shrey Sharma — applied AI. An oil painting by the lake; say hi."/>
+<meta name="description" content="Shrey Sharma — AI/ML engineer and research engineer. Multi-agent LLM systems, fine-tuning, and evaluation harnesses with measured baselines."/>
+<meta property="og:title" content="Shrey Sharma — AI/ML Engineer · Research Engineer"/>
+<meta property="og:description" content="Multi-agent LLM systems, fine-tuning, and evaluation harnesses, reported with their baselines."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/lake.webp">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout: the painting fills the window edge to edge; on click it dissolves and the portrait steps forward on a gold ground. */
+/* Layout: one narrow column, résumé order, cards only where an item is a thing you can open. Floating dock for navigation. */
 :root {
-  --dusk: #2a2a22;        /* behind the painting while it loads */
-  --gold: #b7905a;        /* the portrait's own background, sampled */
-  --gold-deep: #8a6a3e;
-  --cream: #f6ead2;       /* paper of the speech bubble, the sky's lightest note */
-  --umber: #2b2116;       /* text on cream */
-  --umber-soft: #6b5a43;
-  --serif: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --sunk: #f6f7f8;
+  --line: #e7e8ea;
+  --ink: #0b0d10;
+  --ink-2: #4b5260;
+  --ink-3: #8a909b;
+  --accent: #3b5bdb;        /* links, live markers */
+  --accent-soft: #edf1fd;
+  --good: #1f9d55;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --r: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0d0f; --surface: #121417; --sunk: #17191d; --line: #24272d;
+    --ink: #eceef1; --ink-2: #a9afba; --ink-3: #6d7380;
+    --accent: #8ea6ff; --accent-soft: #1a2140; --good: #4cc38a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0d0f; --surface: #121417; --sunk: #17191d; --line: #24272d;
+  --ink: #eceef1; --ink-2: #a9afba; --ink-3: #6d7380;
+  --accent: #8ea6ff; --accent-soft: #1a2140; --good: #4cc38a;
   color-scheme: dark;
 }
-html, body { height: 100%; margin: 0; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
 body {
-  background: var(--dusk);
-  color: var(--cream);
-  font-family: var(--serif);
-  overflow: hidden;
-  transition: background-color 1.4s ease;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 15px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
 }
-body.met { background: var(--gold); }
+a { color: inherit; }
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 20px; padding-block: 56px 140px; display: grid; gap: 56px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 19px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.sub { font-size: 13px; color: var(--ink-3); margin-top: -10px; }
+.mono { font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--ink-2); }
 
-/* ── the painting ── */
-#paint, #fallback {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  display: block;
-  transition: opacity 1.3s ease .2s, filter 1.3s ease .2s;
+/* header */
+.head { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: start; }
+.head .tag { font-family: var(--mono); font-size: 13.5px; color: var(--ink-2); margin-top: 6px; max-width: 46ch; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.ib {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+  font: 500 12.5px var(--sans); color: var(--ink-2); text-decoration: none;
+  transition: border-color .15s, color .15s, background .15s;
 }
-#fallback { object-fit: cover; object-position: 64% 50%; }
-body.met #paint, body.met #fallback { opacity: 0; filter: blur(6px) saturate(1.3); pointer-events: none; }
-body.hot #paint { cursor: pointer; }
-
-.hint {
-  position: fixed; z-index: 3; transform: translate(-50%, -100%);
-  font: italic 600 clamp(18px, 2vw, 24px) var(--serif);
-  color: var(--cream);
-  text-shadow: 0 1px 10px rgba(30, 22, 10, .75);
-  pointer-events: none; white-space: nowrap;
-  opacity: 0; transition: opacity .6s ease;
-  animation: bob 2.6s ease-in-out infinite;
-}
-.hint.on { opacity: .95; }
-body.met .hint { opacity: 0; }
-@keyframes bob { 50% { translate: 0 -5px; } }
-
-/* ── centre stage ── */
-#meet {
-  position: fixed; inset: 0; z-index: 4;
+.ib:hover, .ib:focus-visible { color: var(--ink); border-color: var(--ink-3); outline: none; }
+.ib svg { width: 15px; height: 15px; }
+.ib.icon { width: 30px; padding: 0; justify-content: center; }
+.mail { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); text-decoration: none; }
+.mail:hover { color: var(--accent); }
+.photo {
+  width: 104px; aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  background: var(--sunk); border: 1px solid var(--line);
   display: grid; place-items: center;
-  padding-inline: 16px;
-  pointer-events: none;
-  opacity: 0; transition: opacity 1s ease .9s;
+  font: 600 28px var(--sans); color: var(--ink-3);
 }
-body.met #meet { opacity: 1; pointer-events: auto; }
-.stage { position: relative; height: min(88vh, 900px); aspect-ratio: 3 / 4; max-width: 100%; }
-.portrait {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 68%, transparent 100%);
-          mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 68%, transparent 100%);
-  transform: scale(.94); transition: transform 1.6s cubic-bezier(.2,.7,.2,1) .9s;
-}
-body.met .portrait { transform: scale(1); }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.bubble {
-  position: absolute; left: 76%; top: 9%;
-  width: max-content; max-width: min(300px, 70vw);
-  padding: 16px 22px 18px;
-  background: var(--cream); color: var(--umber);
-  border-radius: 22px 22px 22px 6px;
-  box-shadow: 0 10px 30px rgba(60, 40, 12, .28), 0 1px 0 rgba(255,255,255,.6) inset;
-  font: 600 clamp(26px, 3vw, 36px)/1.05 var(--serif);
-  text-wrap: balance;
-  transform-origin: 0% 100%;
-  transform: scale(.5) rotate(-6deg); opacity: 0;
-  transition: transform .55s cubic-bezier(.3,1.5,.5,1) 2s, opacity .3s ease 2s;
+/* chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font: 500 11.5px var(--mono); color: var(--ink-2);
+  background: var(--sunk); border-radius: 4px; padding: 2px 7px;
 }
-.bubble em { font-style: italic; color: var(--gold-deep); }
-.bubble small { display: block; margin-top: 8px; font: italic 500 16px/1.2 var(--serif); color: var(--umber-soft); }
-body.met .bubble { transform: none; opacity: 1; }
-
-.placard {
-  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5;
-  font: italic 500 17px/1.25 var(--serif); color: var(--umber); text-align: right;
-  opacity: 0; transition: opacity .8s ease 2.4s;
+.pill {
+  font: 500 11px var(--mono); padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid var(--line); color: var(--ink-2);
 }
-.placard b { font-style: normal; font-weight: 600; display: block; }
-body.met .placard { opacity: .85; }
+.pill.live { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.pill.live::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--good); margin-right: 6px; vertical-align: 1px; }
 
-.back {
-  position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5;
-  font: italic 600 20px var(--serif); color: var(--umber);
-  background: none; border: 0; cursor: pointer; padding: 6px 8px;
-  opacity: 0; pointer-events: none; transition: opacity .6s ease 2.2s;
+/* cards */
+.card {
+  border: 1px solid var(--line); border-radius: var(--r); background: var(--surface);
+  padding: 18px; display: grid; gap: 10px; min-width: 0;
 }
-body.met .back { opacity: .85; pointer-events: auto; }
-.back:hover, .back:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: 4px; outline: none; }
+.card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.card .what { font-size: 13px; color: var(--ink-3); margin-top: -6px; }
+.card .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.more { font: 500 12.5px var(--sans); color: var(--accent); text-decoration: none; white-space: nowrap; }
+.more:hover, .more:focus-visible { text-decoration: underline; text-underline-offset: 3px; outline: none; }
 
-/* keyboard path to the sitter */
-.sitter-btn {
-  position: fixed; z-index: 3; width: 1px; height: 1px; padding: 0; margin: 0;
-  background: none; border: 0; opacity: 0;
+/* numbers that carry the claim */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.stats div { background: var(--sunk); padding: 10px 12px; }
+.stats b { display: block; font: 600 18px var(--sans); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.stats span { font: 400 11px var(--mono); color: var(--ink-3); }
+.stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.pipeline { font: 500 12px var(--mono); color: var(--ink-2); overflow-x: auto; white-space: nowrap; padding: 2px 0; }
+.pipeline i { font-style: normal; color: var(--ink-3); padding: 0 6px; }
+
+/* grids */
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid3 .card { padding: 16px; align-content: start; }
+
+/* list rows (achievements, education) */
+.rows { display: grid; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 18px; background: var(--surface); }
+.row + .row { border-top: 1px solid var(--line); }
+.row .when { font: 500 12px var(--mono); color: var(--ink-3); white-space: nowrap; }
+.row .mono { grid-column: 1 / -1; }
+
+/* skills filter */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 12.5px var(--sans); color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 11px; cursor: pointer;
 }
-.sitter-btn:focus-visible { width: auto; height: auto; padding: 6px 12px; opacity: 1;
-  font: italic 600 20px var(--serif); color: var(--umber); background: var(--cream); border-radius: 8px; transform: translate(-50%, -50%); }
+.tab span { font: 500 11px var(--mono); color: var(--ink-3); }
+.tab[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tab[aria-pressed="true"] span { color: var(--bg); opacity: .7; }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.skillbox { border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; background: var(--surface); }
+.skillbox .chips { gap: 8px; }
+.skillbox .chip { font-size: 12px; padding: 4px 9px; background: var(--sunk); border: 1px solid var(--line); }
+.skillbox .count { font: 400 12px var(--mono); color: var(--ink-3); text-align: center; }
 
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+/* dock */
+.dock {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 10;
+  display: flex; gap: 2px; padding: 5px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line); border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none;
+}
+.dock a, .dock button {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 13px var(--sans); color: var(--ink-2); text-decoration: none;
+  padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+  background: none; border: 0; cursor: pointer;
+}
+.dock svg { width: 15px; height: 15px; }
+.dock a:hover, .dock a:focus-visible, .dock button:hover, .dock button:focus-visible { background: var(--sunk); color: var(--ink); outline: none; }
+.dock a.on { color: var(--ink); background: var(--sunk); }
+
+footer { font: 400 12px var(--mono); color: var(--ink-3); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 20px; }
 
 @media (max-width: 640px) {
-  .stage { height: auto; width: min(100%, 420px); }
-  .bubble { left: 50%; top: -4%; transform-origin: 50% 100%; translate: -50% -100%; border-radius: 22px; }
-  .placard { display: none; }
+  .wrap { padding-block: 36px 120px; gap: 44px; }
+  .photo { width: 76px; }
+  h1 { font-size: 24px; }
+  .grid3 { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dock .lbl { display: none; }
+  .dock a, .dock button { padding: 9px 11px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hint { animation: none; }
-  .portrait { transition: none; transform: none; }
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
 
-<h1 class="sr">Shrey Sharma</h1>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.83v1.54h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.63V21h-4V9.75Z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10Z"/></symbol>
+</svg>
 
-<canvas id="paint" role="img" aria-label="Oil painting: a thatched cottage among wildflowers on the left, a calm lake with mountains on the right, and a young man sitting on a rock by the water with a glowing laptop."></canvas>
-<img id="fallback" src="assets/lake.webp" alt="" hidden>
+<main class="wrap" id="top">
 
-<p class="hint" id="hint" aria-hidden="true">psst… say hi</p>
-<button class="sitter-btn" id="sitterBtn" type="button">Say hi to Shrey</button>
+  <!-- ─── header ─────────────────────────────────────── -->
+  <header class="head">
+    <div>
+      <h1>Shrey Sharma</h1>
+      <p class="tag">AI/ML Engineer · Research Engineer — LLM agents, fine-tuning, evaluation</p>
+      <nav class="links" aria-label="Profiles">
+        <a class="ib icon" href="mailto:shrey7shrey@gmail.com" aria-label="Email"><svg><use href="#i-mail"/></svg></a>
+        <a class="ib icon" href="https://github.com/ShreySharma07" target="_blank" rel="noopener" aria-label="GitHub"><svg><use href="#i-gh"/></svg></a>
+        <a class="ib icon" href="https://www.linkedin.com/in/shrey-sharma-8a9425269/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg><use href="#i-in"/></svg></a>
+        <a class="ib" href="https://huggingface.co/ShreySharma07" target="_blank" rel="noopener">Hugging Face</a>
+        <a class="ib" href="resume.pdf" target="_blank" rel="noopener"><svg><use href="#i-doc"/></svg>CV</a>
+      </nav>
+      <a class="mail" href="mailto:shrey7shrey@gmail.com">shrey7shrey@gmail.com</a>
+    </div>
+    <div class="photo" id="photo" aria-label="Photo of Shrey Sharma">SS</div>
+  </header>
 
-<section id="meet" aria-live="polite">
-  <div class="stage">
-    <img class="portrait" src="assets/shrey.webp" alt="Painted portrait of Shrey, standing and waving." loading="lazy">
-    <p class="bubble">hey, I'm <em>Shrey</em> — ask me anything
-      <small>(the asking part arrives next)</small></p>
-  </div>
-</section>
+  <!-- ─── about ──────────────────────────────────────── -->
+  <section id="about" aria-labelledby="h-about">
+    <h2 id="h-about">About</h2>
+    <p class="mono">I build multi-agent LLM systems, fine-tuning pipelines, and the evaluation
+      harnesses that keep their numbers honest. I design agent architectures end to end:
+      planning loops, tool-calling layers, RAG memory, and closed-loop verification. Every
+      result I report comes with the baseline it beat and the hardware it ran on. Most of my
+      work runs on a 6&nbsp;GB consumer GPU, on purpose.</p>
+    <p class="mono">Computer Science (AI) graduate from the University of Lucknow, based in
+      Bengaluru. Looking for <b>AI/ML Engineer</b> and <b>Research Engineer</b> roles in applied
+      LLM and agent research.</p>
+  </section>
 
-<p class="placard"><b>Shrey Sharma</b>Bengaluru, 2026</p>
-<button class="back" type="button" id="back">← back to the lake</button>
+  <!-- ─── research ───────────────────────────────────── -->
+  <section id="research" aria-labelledby="h-research">
+    <h2 id="h-research">Research</h2>
+    <p class="sub">Current paper work</p>
+
+    <article class="card">
+      <div class="top">
+        <h3>KARMA: Multi-Agent LLM System for Automated GPU Kernel Optimization</h3>
+        <span class="pill live">In preparation</span>
+      </div>
+      <p class="what">Workshop paper · ablation studies on KernelBench</p>
+      <p class="mono">Five LLM agents write, verify, and iterate on GPU kernels. A closed
+        verification loop structurally blocks reward hacking, so every reported speedup is real.
+        The paper isolates what drives the results: the knowledge base, pre-flight profiling,
+        and the reflection agent, one variable at a time.</p>
+      <p class="pipeline" aria-label="Agent pipeline">classifier<i>→</i>planner<i>→</i>coder<i>→</i>verifier<i>→</i>reflector</p>
+      <p class="mono">Each kernel passes compile → three-seed correctness → determinism gate →
+        interleaved benchmarking before it counts. A ChromaDB memory carries technique between
+        tasks: one authored entry moved the agent from <b>0.26× to 1.09×</b> on an identical task.</p>
+      <div class="stats" role="list">
+        <div role="listitem"><b>8.99×</b><span>vs PyTorch eager</span></div>
+        <div role="listitem"><b>1.08×</b><span>vs torch.compile</span></div>
+        <div role="listitem"><b>0%</b><span>false-positive correctness</span></div>
+        <div role="listitem"><b>6 GB</b><span>GPU it ran on</span></div>
+      </div>
+      <div class="foot">
+        <div class="chips"><span class="chip">Multi-Agent Systems</span><span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">ChromaDB</span><span class="chip">Evaluation</span></div>
+        <a class="more" href="https://github.com/ShreySharma07/Multi-Agentic-CUDA-optimization" target="_blank" rel="noopener">Repository ↗</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── featured projects ──────────────────────────── -->
+  <section id="projects" aria-labelledby="h-projects">
+    <h2 id="h-projects">Featured Projects</h2>
+    <p class="sub">The work I'd walk you through first</p>
+
+    <article class="card">
+      <div class="top"><h3>Repliq</h3><span class="pill">Agent platform</span></div>
+      <p class="what">Autonomous workflow automation from screen recordings</p>
+      <p class="mono">A screen recording becomes an executable workflow. A ReAct agent
+        (reason → act → observe) runs it through an MCP-compatible tool layer with full execution
+        tracing, retries, and async orchestration over FastAPI. Credentials sit in a zero-trust
+        vault (Fernet encryption, OAuth&nbsp;2.0), so a sandboxed agent never holds a
+        long-lived secret.</p>
+      <div class="foot">
+        <div class="chips"><span class="chip">ReAct</span><span class="chip">MCP</span><span class="chip">FastAPI</span><span class="chip">OAuth 2.0</span></div>
+        <a class="more" href="https://github.com/ShreySharma07/salesforce-agent" target="_blank" rel="noopener">Repository ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><h3>Math-Specialized Llama 2</h3><span class="pill">Fine-tuning</span></div>
+      <p class="what">Llama 2 on GSM8K with QLoRA</p>
+      <div class="stats three" role="list">
+        <div role="listitem"><b>70%</b><span>less GPU memory</span></div>
+        <div role="listitem"><b>0.83</b><span>training loss</span></div>
+        <div role="listitem"><b>8-bit</b><span>quantization</span></div>
+      </div>
+      <p class="mono">QLoRA and PEFT made a model that would not otherwise fit trainable. It
+        ships as a Dockerized inference pipeline on Hugging Face Spaces: data prep, training,
+        evaluation, and deployment on one reproducible path.</p>
+      <div class="foot">
+        <div class="chips"><span class="chip">QLoRA</span><span class="chip">PEFT</span><span class="chip">TRL</span><span class="chip">Docker</span></div>
+        <a class="more" href="https://huggingface.co/ShreySharma07/maths-llama-qlora" target="_blank" rel="noopener">Model on Hugging Face ↗</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── other projects ─────────────────────────────── -->
+  <section id="other" aria-labelledby="h-other">
+    <h2 id="h-other">Other Projects</h2>
+    <div class="grid3">
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/Argus" target="_blank" rel="noopener">Argus ↗</a></h3>
+        <p class="mono">Agentic card-fraud investigation on a TigerGraph knowledge graph (590k
+          transactions, 5,565 closed cases). The graph sets the facts, deterministic code applies
+          the bank's policy, and the LLM weighs the evidence and writes the SAR.</p>
+        <div class="chips"><span class="chip">TigerGraph</span><span class="chip">GraphRAG</span><span class="chip">MCP</span><span class="chip">React</span></div>
+      </article>
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/aws-realtime-fraud-detection" target="_blank" rel="noopener">Real-Time Fraud Detection ↗</a></h3>
+        <p class="mono">Serverless MLOps on AWS: an XGBoost model on SageMaker behind Lambda and API
+          Gateway, a GenAI investigator to explain predictions, human-in-the-loop feedback, and
+          automated retraining with Step Functions.</p>
+        <div class="chips"><span class="chip">SageMaker</span><span class="chip">Lambda</span><span class="chip">Step Functions</span><span class="chip">XGBoost</span></div>
+      </article>
+      <article class="card">
+        <h3><a class="more" style="color:var(--ink)" href="https://github.com/ShreySharma07/speculative_decoding" target="_blank" rel="noopener">Speculative Decoding ↗</a></h3>
+        <p class="mono">A research harness for speculative decoding: decoding runtime, draft-model
+          training, benchmarks, and analysis, with a test-first dev loop that runs on Kaggle GPUs.</p>
+        <div class="chips"><span class="chip">Inference</span><span class="chip">PyTorch</span><span class="chip">Kaggle</span></div>
+        <span class="pill live" style="justify-self:start">Just started</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── achievements ───────────────────────────────── -->
+  <section id="achievements" aria-labelledby="h-ach">
+    <h2 id="h-ach">Achievements &amp; Certifications</h2>
+    <div class="rows">
+      <div class="row">
+        <h3>Top-5 Finalist, IIT Madras Malware Analysis Hackathon</h3>
+        <span class="when">120+ teams</span>
+        <p class="mono">Led a four-person team that built a deep-learning malware classifier and
+          placed in the top 5.</p>
+      </div>
+      <div class="row">
+        <h3>Certifications</h3>
+        <span class="when"></span>
+        <p class="mono">Google Agentic AI (Kaggle) · UC Berkeley Agentic AI MOOC · Machine Learning &amp;
+          Deep Learning (IBM / Coursera)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── skills ─────────────────────────────────────── -->
+  <section id="skills" aria-labelledby="h-skills">
+    <h2 id="h-skills">Skills</h2>
+    <div class="tabs" id="tabs" role="toolbar" aria-label="Filter skills"></div>
+    <div class="skillbox">
+      <div class="chips" id="skillList" aria-live="polite"></div>
+      <p class="count" id="skillCount"></p>
+    </div>
+  </section>
+
+  <!-- ─── education ──────────────────────────────────── -->
+  <section id="education" aria-labelledby="h-edu">
+    <h2 id="h-edu">Education</h2>
+    <div class="rows">
+      <div class="row">
+        <h3>University of Lucknow</h3>
+        <span class="when">2022 – 2026</span>
+        <p class="mono">B.Tech, Computer Science (AI specialization). Coursework: Machine Learning, Deep
+          Learning, NLP, Linear Algebra, Probability &amp; Statistics, Data Structures &amp; Algorithms.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Shrey Sharma · Bengaluru</span>
+    <span>shrey7shrey@gmail.com</span>
+  </footer>
+</main>
+
+<nav class="dock" aria-label="Sections">
+  <a href="#top"><svg aria-hidden="true"><use href="#i-home"/></svg><span class="lbl">Home</span></a>
+  <a href="#research"><svg aria-hidden="true"><use href="#i-flask"/></svg><span class="lbl">Research</span></a>
+  <a href="#projects"><svg aria-hidden="true"><use href="#i-code"/></svg><span class="lbl">Projects</span></a>
+  <a href="#skills"><svg aria-hidden="true"><use href="#i-bolt"/></svg><span class="lbl">Skills</span></a>
+  <a href="#education"><svg aria-hidden="true"><use href="#i-cap"/></svg><span class="lbl">Education</span></a>
+  <button type="button" id="theme" aria-label="Toggle dark mode"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
+</nav>
 
 <script>
 (() => {
-  const body = document.body;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* Where things are in the painting, as fractions of the image */
-  const IMG = { w: 2000, h: 1091 };
-  const SITTER = { x0: .585, x1: .705, y0: .70, y1: .875 };  // man on the rock
-  const SCREEN = { x: .66, y: .738 };                         // laptop glow
-  const HINT_AT = { x: .645, y: .655 };
-  const FOCUS = { x: .64, y: .5 };  // what stays in frame on narrow screens
-
-  /* ── cover-fit maths, shared by shader and hit-testing ── */
-  let vw = innerWidth, vh = innerHeight;
-  const cover = () => {
-    const s = Math.max(vw / IMG.w, vh / IMG.h);
-    const dw = IMG.w * s, dh = IMG.h * s;
-    const ox = Math.min(0, Math.max(vw - dw, vw / 2 - FOCUS.x * dw));
-    const oy = Math.min(0, Math.max(vh - dh, vh / 2 - FOCUS.y * dh));
-    return { s, dw, dh, ox, oy };
-  };
-  const toImg = (x, y) => { const c = cover(); return { u: (x - c.ox) / c.dw, v: (y - c.oy) / c.dh }; };
-  const toScreen = (u, v) => { const c = cover(); return { x: c.ox + u * c.dw, y: c.oy + v * c.dh }; };
-  const onSitter = (x, y) => { const p = toImg(x, y); return p.u > SITTER.x0 && p.u < SITTER.x1 && p.v > SITTER.y0 && p.v < SITTER.y1; };
-
-  const hint = document.getElementById('hint');
-  const sitterBtn = document.getElementById('sitterBtn');
-  const place = () => {
-    const h = toScreen(HINT_AT.x, HINT_AT.y);
-    hint.style.left = h.x + 'px'; hint.style.top = h.y + 'px';
-    const b = toScreen((SITTER.x0 + SITTER.x1) / 2, (SITTER.y0 + SITTER.y1) / 2);
-    sitterBtn.style.left = b.x + 'px'; sitterBtn.style.top = b.y + 'px';
-  };
-
-  /* ── meet / leave ── */
-  let meltT0 = 0, melting = 0;
-  const meet = () => { if (body.classList.contains('met')) return; body.classList.add('met'); melting = 1; meltT0 = performance.now(); };
-  const leave = () => { body.classList.remove('met'); melting = 0; };
-  sitterBtn.addEventListener('click', meet);
-  document.getElementById('back').addEventListener('click', leave);
-  addEventListener('keydown', e => { if (e.key === 'Escape') leave(); });
-
-  /* ── WebGL: the painting, smeared like wet oil where the cursor drags ── */
-  const cv = document.getElementById('paint');
-  const gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: false });
-  const MAXP = 24;
-
-  const showFallback = () => {
-    cv.hidden = true;
-    const f = document.getElementById('fallback'); f.hidden = false;
-    f.addEventListener('click', e => { if (onSitter(e.clientX, e.clientY)) meet(); });
-    f.addEventListener('pointermove', e => body.classList.toggle('hot', onSitter(e.clientX, e.clientY)));
-  };
-  if (!gl) { showFallback(); place(); hint.classList.add('on'); addEventListener('resize', () => { vw = innerWidth; vh = innerHeight; place(); }); return; }
-
-  const VS = `attribute vec2 p; varying vec2 vUv;
-    void main(){ vUv = p * .5 + .5; vUv.y = 1. - vUv.y; gl_Position = vec4(p, 0., 1.); }`;
-  const FS = `precision highp float;
-    varying vec2 vUv;
-    uniform sampler2D tex;
-    uniform vec2 res;          // canvas px
-    uniform vec4 fit;          // ox, oy, dw, dh (px)
-    uniform float time, melt, still;
-    uniform vec4 pts[${MAXP}]; // x, y (px), vx, vy (px)
-    uniform float age[${MAXP}];
-    uniform vec2 screenUv;
-
-    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-    float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
-      return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y); }
-
-    void main(){
-      vec2 px = vUv * res;
-      vec2 disp = vec2(0.);
-      vec2 grad = vec2(0.);
-      for (int i = 0; i < ${MAXP}; i++) {
-        float a = age[i];
-        if (a >= 1.) continue;
-        vec2 d = px - pts[i].xy;
-        float r = 85. + 60. * a;                 // the smear widens as it settles
-        float w = exp(-dot(d, d) / (r * r)) * pow(1. - a, 2.);
-        // drag paint along the stroke: sample from behind the motion
-        disp -= pts[i].zw * w * 2.6;
-        // a slow ring, like a thumb pressed into wet paint
-        float dl = length(d) + 1e-3;
-        disp += (d / dl) * sin(dl * .09 - a * 9.) * w * 10.;
-        grad += -2. * d / (r * r) * w;
-      }
-      // brush-scale wobble so the smear breaks up along the strokes
-      vec2 n = vec2(noise(px * .03 + time * .2), noise(px * .03 + 17.3 - time * .2)) - .5;
-      disp += n * length(disp) * 1.2;
-
-      // the lake breathes a little
-      vec2 iuv = (px - fit.xy) / fit.zw;
-      float lake = smoothstep(.52, .56, iuv.y) * smoothstep(.54, .6, iuv.x) * (1. - smoothstep(.83, .9, iuv.y)) * (1. - still);
-      disp.x += sin(iuv.y * 260. + time * 1.4) * 1.1 * lake;
-
-      // dissolve when you meet Shrey
-      disp += (vec2(noise(px * .006 + 3.), noise(px * .006 + 9.)) - .5) * melt * 70.;
-
-      vec2 uv = (px + disp - fit.xy) / fit.zw;
-      vec3 col = texture2D(tex, clamp(uv, 0., 1.)).rgb;
-
-      // wet sheen: light from the upper right catching the disturbed paint
-      float sheen = clamp(dot(grad, normalize(vec2(-.6, .8))) * 9., 0., 1.);
-      col += sheen * .14 * vec3(1., .95, .85);
-
-      // laptop screen pulses softly
-      vec2 sd = (iuv - screenUv) * vec2(fit.z / fit.w, 1.);
-      float glow = exp(-dot(sd, sd) / .0009) * (.55 + .45 * sin(time * 1.7)) * (1. - still * .6);
-      col += glow * .16 * vec3(1., .85, .55);
-
-      gl_FragColor = vec4(col, 1.);
-    }`;
-
-  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s); return s; };
-  let prog;
-  try {
-    prog = gl.createProgram();
-    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
-    gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw gl.getProgramInfoLog(prog);
-  } catch (err) { console.warn(err); showFallback(); place(); hint.classList.add('on'); return; }
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const U = n => gl.getUniformLocation(prog, n);
-  const u = { res: U('res'), fit: U('fit'), time: U('time'), melt: U('melt'), still: U('still'),
-              pts: U('pts'), age: U('age'), screenUv: U('screenUv') };
-  gl.uniform2f(u.screenUv, SCREEN.x, SCREEN.y);
-  gl.uniform1f(u.still, reduced ? 1 : 0);
-
-  const tex = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([42, 42, 34, 255]));
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  /* photo: shows assets/photo.jpg once it exists, initials until then */
   const img = new Image();
-  img.onload = () => {
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-    setTimeout(() => hint.classList.add('on'), 900);
-  };
-  img.onerror = showFallback;
-  img.src = 'assets/lake.webp';
+  img.alt = 'Shrey Sharma';
+  img.onload = () => { const p = document.getElementById('photo'); p.textContent = ''; p.appendChild(img); };
+  img.src = 'assets/photo.jpg';
 
-  let dpr = 1;
-  const size = () => {
-    vw = innerWidth; vh = innerHeight;
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
-    gl.viewport(0, 0, cv.width, cv.height);
-    place();
+  /* skills, grouped as on the resume */
+  const SKILLS = {
+    'LLM & Agents': ['LLM Fine-Tuning', 'QLoRA', 'LoRA', 'PEFT', 'Quantization', 'RAG', 'Prompt Engineering', 'ReAct Agents', 'Multi-Agent Orchestration', 'Tool Calling', 'MCP', 'Evaluation & Benchmarking'],
+    'ML Frameworks': ['PyTorch', 'TensorFlow', 'Hugging Face Transformers', 'TRL', 'Scikit-learn', 'ChromaDB', 'Google ADK'],
+    'Languages': ['Python', 'C++', 'SQL', 'Java'],
+    'MLOps': ['Docker', 'FastAPI', 'AWS SageMaker', 'AWS Lambda', 'AWS EC2', 'AWS S3', 'MLflow', 'DVC', 'CI/CD', 'Git', 'Linux'],
+    'Foundations': ['Deep Learning', 'NLP', 'Linear Algebra', 'Probability & Statistics', 'Experiment Design', 'Data Structures & Algorithms'],
   };
-  size(); addEventListener('resize', size);
-
-  /* ── pointer trail ── */
-  const LIFE = 1700;
-  const trail = [];
-  let last = null;
-  addEventListener('pointermove', e => {
-    if (body.classList.contains('met')) return;
-    body.classList.toggle('hot', onSitter(e.clientX, e.clientY));
-    if (reduced) return;
-    const x = e.clientX, y = e.clientY, now = performance.now();
-    if (last && Math.hypot(x - last.x, y - last.y) < 10) return;
-    let vx = last ? x - last.x : 0, vy = last ? y - last.y : 0;
-    const m = Math.hypot(vx, vy), cap = 40;
-    if (m > cap) { vx *= cap / m; vy *= cap / m; }
-    trail.push({ x, y, vx, vy, t: now });
-    if (trail.length > MAXP) trail.shift();
-    last = { x, y };
-  }, { passive: true });
-  addEventListener('pointerleave', () => { last = null; body.classList.remove('hot'); });
-  cv.addEventListener('click', e => { if (onSitter(e.clientX, e.clientY)) meet(); });
-
-  const P = new Float32Array(MAXP * 4), A = new Float32Array(MAXP).fill(1);
-  const frame = now => {
-    const c = cover();
-    for (let i = 0; i < MAXP; i++) {
-      const p = trail[i];
-      if (!p) { A[i] = 1; continue; }
-      const a = (now - p.t) / LIFE;
-      P[i*4] = p.x * dpr; P[i*4+1] = p.y * dpr; P[i*4+2] = p.vx * dpr; P[i*4+3] = p.vy * dpr;
-      A[i] = Math.min(a, 1);
-    }
-    while (trail.length && now - trail[0].t > LIFE) trail.shift();
-    const melt = melting ? Math.min((now - meltT0) / 1400, 1) : 0;
-    gl.uniform2f(u.res, cv.width, cv.height);
-    gl.uniform4f(u.fit, c.ox * dpr, c.oy * dpr, c.dw * dpr, c.dh * dpr);
-    gl.uniform1f(u.time, reduced ? 0 : now / 1000);
-    gl.uniform1f(u.melt, reduced ? 0 : melt);
-    gl.uniform4fv(u.pts, P); gl.uniform1fv(u.age, A);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    requestAnimationFrame(frame);
+  const all = Object.values(SKILLS).flat();
+  const tabs = document.getElementById('tabs');
+  const list = document.getElementById('skillList');
+  const count = document.getElementById('skillCount');
+  const groups = [['All', all], ...Object.entries(SKILLS)];
+  const show = (name, items) => {
+    list.innerHTML = items.map(s => `<span class="chip">${s.replace(/&/g, '&amp;')}</span>`).join('');
+    count.textContent = `${items.length} ${name === 'All' ? 'skills in total' : 'in ' + name}`;
+    tabs.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', t.dataset.g === name));
   };
-  requestAnimationFrame(frame);
+  groups.forEach(([name, items]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tab'; b.dataset.g = name;
+    b.innerHTML = `${name.replace(/&/g, '&amp;')} <span>${items.length}</span>`;
+    b.addEventListener('click', () => show(name, items));
+    tabs.appendChild(b);
+  });
+  show('All', all);
+
+  /* theme toggle: remembers the choice when storage is available */
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* dock: highlight the section in view */
+  const links = [...document.querySelectorAll('.dock a')];
+  const targets = links.map(a => document.querySelector(a.getAttribute('href')));
+  const spy = () => {
+    let i = 0;
+    targets.forEach((t, k) => { if (t.getBoundingClientRect().top < innerHeight * .4) i = k; });
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true }); spy();
 })();
 </script>
 </body>
