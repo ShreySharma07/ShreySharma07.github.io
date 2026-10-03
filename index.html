@@ -4,123 +4,126 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Shrey Sharma</title>
-<meta name="description" content="Shrey Sharma — applied AI. A sketch by the lake; say hi."/>
+<meta name="description" content="Shrey Sharma — applied AI. An oil painting by the lake; say hi."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/lake.webp">
 <style>
-/* Layout: one sheet of paper, full bleed. A pencil sketch fills it; water spreads where the cursor goes. */
+/* Layout: the painting fills the window edge to edge; on click it dissolves and the portrait steps forward on a gold ground. */
 :root {
-  --paper: #fbfaf6;      /* drawing paper, faint warm */
-  --paper-edge: #ece7da; /* vignette at the sheet's edges */
-  --graphite: #2f2d2a;   /* pencil line */
-  --graphite-soft: #6d6962;
-  --wash: #4d6a86;       /* the blue of water soaking into paper */
-  --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
-  color-scheme: light;
+  --dusk: #2a2a22;        /* behind the painting while it loads */
+  --gold: #b7905a;        /* the portrait's own background, sampled */
+  --gold-deep: #8a6a3e;
+  --cream: #f6ead2;       /* paper of the speech bubble, the sky's lightest note */
+  --umber: #2b2116;       /* text on cream */
+  --umber-soft: #6b5a43;
+  --serif: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
+  color-scheme: dark;
 }
 html, body { height: 100%; margin: 0; }
 body {
-  background: var(--paper);
-  color: var(--graphite);
-  font-family: var(--hand);
+  background: var(--dusk);
+  color: var(--cream);
+  font-family: var(--serif);
   overflow: hidden;
-  -webkit-font-smoothing: antialiased;
+  transition: background-color 1.4s ease;
 }
+body.met { background: var(--gold); }
 
-/* paper grain + edge vignette */
-.paper {
-  position: fixed; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse at center, transparent 55%, var(--paper-edge) 130%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .33  0 0 0 0 .3  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  z-index: 3;
-}
-
-#scene {
+/* ── the painting ── */
+#paint, #fallback {
   position: fixed; inset: 0; width: 100%; height: 100%;
-  display: block; z-index: 1;
+  display: block;
+  transition: opacity 1.3s ease .2s, filter 1.3s ease .2s;
 }
-#wet {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 2;
-  mix-blend-mode: multiply;
+#fallback { object-fit: cover; object-position: 64% 50%; }
+body.met #paint, body.met #fallback { opacity: 0; filter: blur(6px) saturate(1.3); pointer-events: none; }
+body.hot #paint { cursor: pointer; }
+
+.hint {
+  position: fixed; z-index: 3; transform: translate(-50%, -100%);
+  font: italic 600 clamp(18px, 2vw, 24px) var(--serif);
+  color: var(--cream);
+  text-shadow: 0 1px 10px rgba(30, 22, 10, .75);
+  pointer-events: none; white-space: nowrap;
+  opacity: 0; transition: opacity .6s ease;
+  animation: bob 2.6s ease-in-out infinite;
 }
+.hint.on { opacity: .95; }
+body.met .hint { opacity: 0; }
+@keyframes bob { 50% { translate: 0 -5px; } }
 
-/* pencil strokes */
-.ink { fill: none; stroke: var(--graphite); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.ink.thin { stroke-width: 1.2; stroke: var(--graphite-soft); }
-.ink.hatch { stroke-width: 1; stroke: var(--graphite-soft); opacity: .7; }
-.fillink { fill: var(--graphite); stroke: none; }
-
-/* pencil draws itself in on load */
-.draw .ink { stroke-dasharray: 1; stroke-dashoffset: 1; animation: sketch var(--dur, 1.1s) ease-out var(--delay, 0s) forwards; }
-@keyframes sketch { to { stroke-dashoffset: 0; } }
-
-/* layers fade when you meet Shrey */
-.layer { transition: opacity 1.1s ease, filter 1.1s ease; }
-body.met .layer { opacity: 0; filter: blur(2px); pointer-events: none; }
-body.met #sky    { transition-delay: 0s; }
-body.met #house  { transition-delay: .15s; }
-body.met #lake   { transition-delay: .3s; }
-body.met #sitter { transition-delay: 0s; transition-duration: .5s; }
-
-/* the person by the lake */
-#sitter { cursor: pointer; }
-#sitter:focus { outline: none; }
-#sitter:focus-visible .halo { opacity: 1; }
-.halo { fill: none; stroke: var(--wash); stroke-width: 1.4; stroke-dasharray: 4 6; opacity: 0; transition: opacity .3s; }
-#sitter:hover .halo { opacity: .8; }
-.screen-glow { fill: #fff6c9; opacity: .55; animation: flicker 3.2s ease-in-out infinite; }
-@keyframes flicker { 50% { opacity: .85; } }
-.hint { font-family: var(--hand); font-size: 26px; fill: var(--graphite-soft); }
-.hint-g { animation: bob 2.4s ease-in-out infinite; transform-box: fill-box; }
-@keyframes bob { 50% { transform: translateY(-5px); } }
-
-/* standing Shrey, centre stage */
+/* ── centre stage ── */
 #meet {
   position: fixed; inset: 0; z-index: 4;
   display: grid; place-items: center;
   padding-inline: 16px;
   pointer-events: none;
-  opacity: 0; transition: opacity .9s ease .7s;
+  opacity: 0; transition: opacity 1s ease .9s;
 }
 body.met #meet { opacity: 1; pointer-events: auto; }
-.stage { position: relative; width: min(420px, 100%); display: grid; justify-items: center; }
-.stage svg { width: min(220px, 52vw); height: auto; overflow: visible; }
-.bubble {
-  position: relative;
-  margin-bottom: 14px;
-  padding: 14px 26px 16px;
-  font-size: clamp(28px, 6vw, 40px);
-  font-weight: 700;
-  line-height: 1.05;
-  text-align: center;
-  text-wrap: balance;
-  color: var(--graphite);
-  transform: scale(.6) rotate(-4deg); transform-origin: 50% 100%;
-  opacity: 0; transition: transform .5s cubic-bezier(.3,1.6,.5,1) 1.5s, opacity .3s ease 1.5s;
+.stage { position: relative; height: min(88vh, 900px); aspect-ratio: 3 / 4; max-width: 100%; }
+.portrait {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 68%, transparent 100%);
+          mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 68%, transparent 100%);
+  transform: scale(.94); transition: transform 1.6s cubic-bezier(.2,.7,.2,1) .9s;
 }
-body.met .bubble { transform: scale(1) rotate(-1.5deg); opacity: 1; }
-.bubble svg.outline { position: absolute; inset: -6px -10px -18px; width: calc(100% + 20px); height: calc(100% + 24px); overflow: visible; pointer-events: none; }
-.bubble small { display: block; font-size: .62em; font-weight: 500; color: var(--graphite-soft); margin-top: 4px; }
-.wave-arm { transform-origin: 108px 128px; animation: wave 1.2s ease-in-out 1.8s 3; }
-@keyframes wave { 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
+body.met .portrait { transform: scale(1); }
+
+.bubble {
+  position: absolute; left: 76%; top: 9%;
+  width: max-content; max-width: min(300px, 70vw);
+  padding: 16px 22px 18px;
+  background: var(--cream); color: var(--umber);
+  border-radius: 22px 22px 22px 6px;
+  box-shadow: 0 10px 30px rgba(60, 40, 12, .28), 0 1px 0 rgba(255,255,255,.6) inset;
+  font: 600 clamp(26px, 3vw, 36px)/1.05 var(--serif);
+  text-wrap: balance;
+  transform-origin: 0% 100%;
+  transform: scale(.5) rotate(-6deg); opacity: 0;
+  transition: transform .55s cubic-bezier(.3,1.5,.5,1) 2s, opacity .3s ease 2s;
+}
+.bubble em { font-style: italic; color: var(--gold-deep); }
+.bubble small { display: block; margin-top: 8px; font: italic 500 16px/1.2 var(--serif); color: var(--umber-soft); }
+body.met .bubble { transform: none; opacity: 1; }
+
+.placard {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5;
+  font: italic 500 17px/1.25 var(--serif); color: var(--umber); text-align: right;
+  opacity: 0; transition: opacity .8s ease 2.4s;
+}
+.placard b { font-style: normal; font-weight: 600; display: block; }
+body.met .placard { opacity: .85; }
 
 .back {
   position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5;
-  font: 600 22px var(--hand); color: var(--graphite-soft);
+  font: italic 600 20px var(--serif); color: var(--umber);
   background: none; border: 0; cursor: pointer; padding: 6px 8px;
-  opacity: 0; pointer-events: none; transition: opacity .5s ease 1.6s;
+  opacity: 0; pointer-events: none; transition: opacity .6s ease 2.2s;
 }
-body.met .back { opacity: 1; pointer-events: auto; }
-.back:hover, .back:focus-visible { color: var(--graphite); text-decoration: underline wavy; outline: none; }
+body.met .back { opacity: .85; pointer-events: auto; }
+.back:hover, .back:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: 4px; outline: none; }
+
+/* keyboard path to the sitter */
+.sitter-btn {
+  position: fixed; z-index: 3; width: 1px; height: 1px; padding: 0; margin: 0;
+  background: none; border: 0; opacity: 0;
+}
+.sitter-btn:focus-visible { width: auto; height: auto; padding: 6px 12px; opacity: 1;
+  font: italic 600 20px var(--serif); color: var(--umber); background: var(--cream); border-radius: 8px; transform: translate(-50%, -50%); }
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
+@media (max-width: 640px) {
+  .stage { height: auto; width: min(100%, 420px); }
+  .bubble { left: 50%; top: -4%; transform-origin: 50% 100%; translate: -50% -100%; border-radius: 22px; }
+  .placard { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .draw .ink { animation: none; stroke-dashoffset: 0; }
-  .hint-g, .screen-glow, .wave-arm { animation: none; }
+  .hint { animation: none; }
+  .portrait { transition: none; transform: none; }
 }
 </style>
 </head>
@@ -128,140 +131,21 @@ body.met .back { opacity: 1; pointer-events: auto; }
 
 <h1 class="sr">Shrey Sharma</h1>
 
-<svg id="scene" class="draw" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Pencil sketch: a house on the left, a lake on the right, and a person sitting by the water with a laptop.">
-  <defs>
-    <!-- hand-drawn wobble: nudges every stroke a little off true -->
-    <filter id="pencil" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="t"/>
-      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2"/>
-    </filter>
-  </defs>
+<canvas id="paint" role="img" aria-label="Oil painting: a thatched cottage among wildflowers on the left, a calm lake with mountains on the right, and a young man sitting on a rock by the water with a glowing laptop."></canvas>
+<img id="fallback" src="assets/lake.webp" alt="" hidden>
 
-  <g filter="url(#pencil)">
+<p class="hint" id="hint" aria-hidden="true">psst… say hi</p>
+<button class="sitter-btn" id="sitterBtn" type="button">Say hi to Shrey</button>
 
-  <!-- ─── sky ─────────────────────────────── -->
-  <g id="sky" class="layer">
-    <circle class="ink" pathLength="1" cx="1330" cy="170" r="52" style="--delay:1.6s"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.9s" d="M1300 140 l28 -18 M1294 162 l48 -32 M1293 186 l62 -42 M1302 204 l58 -40 M1320 216 l40 -28"/>
-    <path class="ink thin" pathLength="1" style="--delay:1.4s;--dur:1.6s" d="M180 150 q20 -30 55 -18 q15 -32 55 -20 q35 -10 45 22 q35 4 25 30 q-10 14 -40 10 l-130 0 q-30 -2 -24 -16 q4 -10 14 -8 Z"/>
-    <path class="ink thin" pathLength="1" style="--delay:1.7s;--dur:1.6s" d="M820 110 q14 -22 42 -14 q14 -26 46 -14 q30 -6 34 18 q26 4 18 22 q-8 10 -30 8 l-100 0 q-22 -2 -18 -12 q4 -8 8 -8 Z"/>
-    <path class="ink thin" pathLength="1" style="--delay:2.2s" d="M1040 240 q8 -8 16 0 q8 -8 16 0 M1090 220 q6 -6 12 0 q6 -6 12 0 M1004 262 q5 -5 10 0 q5 -5 10 0"/>
-  </g>
-
-  <!-- ─── house + tree ────────────────────── -->
-  <g id="house" class="layer">
-    <!-- ground -->
-    <path class="ink" pathLength="1" style="--delay:0s;--dur:1.4s" d="M40 602 C200 598 420 606 620 600 S760 598 790 604"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.2s" d="M70 612 l4 -10 M110 616 l3 -9 M150 610 l5 -11 M560 614 l4 -10 M600 610 l3 -9 M640 616 l4 -10 M690 612 l3 -9 M730 615 l5 -10"/>
-    <!-- walls -->
-    <path class="ink" pathLength="1" style="--delay:.2s" d="M210 600 L212 382 L520 380 L522 600"/>
-    <!-- roof -->
-    <path class="ink" pathLength="1" style="--delay:.4s" d="M184 386 L364 236 L548 384 Z"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.1s;--dur:1.4s" d="M230 370 L364 258 M262 372 L372 280 M296 372 L384 298 M330 372 L398 316 M366 372 L414 332 M402 372 L432 348 M438 372 L452 362"/>
-    <!-- chimney -->
-    <path class="ink" pathLength="1" style="--delay:.6s" d="M448 312 L448 262 L482 262 L482 340"/>
-    <path class="ink thin" pathLength="1" style="--delay:2.1s;--dur:2s" d="M466 252 q-14 -16 4 -30 q18 -14 0 -32 q-16 -16 6 -34"/>
-    <!-- door -->
-    <path class="ink" pathLength="1" style="--delay:.8s" d="M334 600 L334 486 Q364 470 394 486 L394 600"/>
-    <circle class="fillink" cx="384" cy="546" r="3"/>
-    <!-- windows -->
-    <path class="ink" pathLength="1" style="--delay:.9s" d="M244 420 h62 v56 h-62 Z M275 420 v56 M244 448 h62"/>
-    <path class="ink" pathLength="1" style="--delay:1s" d="M424 420 h62 v56 h-62 Z M455 420 v56 M424 448 h62"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.3s" d="M212 560 l20 -20 M212 584 l36 -36 M226 598 l30 -30 M486 598 l34 -34 M504 598 l16 -16"/>
-    <!-- path to the door -->
-    <path class="ink thin" pathLength="1" style="--delay:1.4s" d="M340 604 C330 640 300 680 270 720 M390 604 C400 640 420 680 450 720"/>
-    <!-- tree -->
-    <path class="ink" pathLength="1" style="--delay:.7s" d="M640 600 C644 560 638 520 646 470 M660 600 C656 560 664 520 656 470"/>
-    <path class="ink" pathLength="1" style="--delay:1s;--dur:1.6s" d="M650 476 C590 482 572 430 600 404 C580 360 620 320 656 334 C676 300 730 314 728 352 C760 372 750 430 712 440 C704 474 672 484 650 476 Z"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.5s" d="M612 420 q12 -6 18 4 M640 380 q12 -6 18 4 M676 400 q12 -6 18 4 M700 360 q10 -5 16 3 M660 446 q12 -6 18 4"/>
-  </g>
-
-  <!-- ─── lake ────────────────────────────── -->
-  <g id="lake" class="layer">
-    <!-- far hills -->
-    <path class="ink thin" pathLength="1" style="--delay:.5s;--dur:1.8s" d="M1000 548 C1030 500 1050 490 1080 470 C1160 440 1240 510 1320 486 C1400 462 1480 500 1600 480"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.6s" d="M1090 488 l-14 22 M1110 482 l-20 30 M1130 478 l-22 34 M1300 500 l-12 20 M1320 494 l-16 26"/>
-    <!-- shoreline -->
-    <path class="ink" pathLength="1" style="--delay:.3s;--dur:1.6s" d="M790 604 C840 596 880 580 960 572 C1120 560 1400 566 1600 570"/>
-    <path class="ink" pathLength="1" style="--delay:.6s;--dur:1.6s" d="M960 640 C900 660 870 700 900 740 C940 790 1100 830 1300 840 C1420 846 1520 840 1600 830"/>
-    <!-- water lines -->
-    <path class="ink thin" pathLength="1" style="--delay:1.2s" d="M1040 600 q20 -6 40 0 t40 0 M1240 590 q20 -6 40 0 t40 0 t40 0 M1100 650 q24 -6 48 0 t48 0 M1380 640 q20 -6 40 0 t40 0 M990 700 q20 -6 40 0 t40 0 M1200 720 q24 -6 48 0 t48 0 t48 0 M1450 700 q20 -6 40 0 M1060 780 q20 -6 40 0 t40 0"/>
-    <!-- reflection of the sun -->
-    <path class="ink hatch" pathLength="1" style="--delay:2s" d="M1310 610 h44 M1300 626 h62 M1316 642 h34 M1308 658 h46"/>
-    <!-- reeds -->
-    <path class="ink" pathLength="1" style="--delay:1.3s" d="M1006 640 C1004 610 1010 590 1000 566 M1018 642 C1020 610 1028 596 1036 576 M994 646 C988 624 978 610 970 600"/>
-    <path class="ink" pathLength="1" style="--delay:1.5s" d="M998 566 q-4 -14 2 -24 q8 10 -2 24 M1034 578 q0 -14 8 -22 q6 12 -8 22"/>
-    <!-- small boat -->
-    <path class="ink" pathLength="1" style="--delay:1.8s" d="M1180 676 L1260 676 L1244 692 L1196 692 Z M1220 676 L1220 632 L1248 670"/>
-  </g>
-
-  <!-- ─── the person by the lake ──────────── -->
-  <g id="sitter" class="layer" tabindex="0" role="button" aria-label="Say hi to Shrey">
-   <g transform="translate(876 616) scale(1.4) translate(-876 -616)">
-    <rect x="800" y="470" width="170" height="160" fill="transparent"/>
-    <ellipse class="halo" cx="878" cy="560" rx="78" ry="74"/>
-    <!-- rock he sits on -->
-    <path class="ink" pathLength="1" style="--delay:.9s" d="M838 616 C836 596 852 588 876 588 C902 588 916 598 914 616"/>
-    <path class="ink hatch" pathLength="1" style="--delay:1.4s" d="M846 612 l10 -12 M860 614 l12 -14 M878 614 l12 -14 M896 614 l10 -12"/>
-    <!-- head + hair -->
-    <circle class="ink" pathLength="1" style="--delay:1.2s" cx="862" cy="508" r="15"/>
-    <path class="ink" pathLength="1" style="--delay:1.4s" d="M848 502 q6 -16 22 -12 q8 2 8 10 M850 498 q2 -8 10 -10"/>
-    <!-- torso, leaning toward the laptop -->
-    <path class="ink" pathLength="1" style="--delay:1.4s" d="M860 523 C858 548 862 570 870 590"/>
-    <!-- legs: thigh forward, shin down to the shore -->
-    <path class="ink" pathLength="1" style="--delay:1.6s" d="M870 590 L912 584 L920 620 M868 592 L906 592 L912 622"/>
-    <!-- arms to keyboard -->
-    <path class="ink" pathLength="1" style="--delay:1.7s" d="M861 538 C870 556 884 568 904 574 M862 542 C868 562 880 574 898 580"/>
-    <!-- laptop -->
-    <polygon class="screen-glow" points="918,576 932,546 942,548 930,578"/>
-    <path class="ink" pathLength="1" style="--delay:1.9s" d="M886 580 L930 578 L944 546"/>
-    <!-- hint -->
-    <g class="hint-g">
-      <text class="hint" x="930" y="474">psst… say hi</text>
-      <path class="ink thin" pathLength="1" style="--delay:2.4s" d="M936 482 C922 492 908 492 896 496 M896 496 l10 -8 M896 496 l12 4"/>
-    </g>
-   </g>
-  </g>
-
-  </g>
-</svg>
-
-<canvas id="wet" aria-hidden="true"></canvas>
-<div class="paper" aria-hidden="true"></div>
-
-<!-- ─── centre stage ─────────────────────── -->
 <section id="meet" aria-live="polite">
   <div class="stage">
-    <div class="bubble">
-      <svg class="outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="ink" vector-effect="non-scaling-stroke" filter="url(#pencil)"
-              d="M8 6 C30 2 72 3 94 7 C99 30 99 58 95 78 C78 82 62 82 52 81 L42 98 L40 81 C26 82 14 81 6 78 C2 56 2 26 8 6 Z"/>
-      </svg>
-      hey, I'm Shrey —<br>ask me anything
-      <small>(the asking part arrives next)</small>
-    </div>
-    <svg viewBox="0 0 200 320" aria-hidden="true">
-      <g filter="url(#pencil)">
-        <circle class="ink" cx="100" cy="60" r="28"/>
-        <path class="ink" d="M73 52 q8 -30 38 -26 q18 4 18 22 M76 46 q6 -14 20 -18"/>
-        <path class="ink" d="M90 70 q10 8 20 0"/>
-        <circle class="fillink" cx="90" cy="58" r="2.6"/>
-        <circle class="fillink" cx="110" cy="58" r="2.6"/>
-        <path class="ink" d="M100 88 C98 140 100 180 100 210"/>
-        <path class="ink" d="M100 210 L78 300 M100 210 L124 300"/>
-        <path class="ink" d="M78 300 l-14 2 M124 300 l14 2"/>
-        <path class="ink" d="M100 128 C84 150 74 170 70 196"/>
-        <!-- laptop tucked under the left arm -->
-        <path class="ink thin" d="M58 172 l34 10 l-6 22 l-34 -10 Z"/>
-        <g class="wave-arm">
-          <path class="ink" d="M100 128 C118 118 132 100 142 76"/>
-          <path class="ink" d="M142 76 l-6 -12 M142 76 l2 -14 M142 76 l8 -10"/>
-        </g>
-      </g>
-    </svg>
+    <img class="portrait" src="assets/shrey.webp" alt="Painted portrait of Shrey, standing and waving." loading="lazy">
+    <p class="bubble">hey, I'm <em>Shrey</em> — ask me anything
+      <small>(the asking part arrives next)</small></p>
   </div>
 </section>
 
+<p class="placard"><b>Shrey Sharma</b>Bengaluru, 2026</p>
 <button class="back" type="button" id="back">← back to the lake</button>
 
 <script>
@@ -269,105 +153,199 @@ body.met .back { opacity: 1; pointer-events: auto; }
   const body = document.body;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── portrait screens: show the whole scene instead of cropping it ── */
-  const scene = document.getElementById('scene');
-  const fit = () => {
-    const portrait = innerWidth / innerHeight < 1.1;
-    scene.setAttribute('viewBox', portrait ? '140 90 1360 760' : '0 0 1600 900');
-    scene.setAttribute('preserveAspectRatio', portrait ? 'xMidYMid meet' : 'xMidYMid slice');
+  /* Where things are in the painting, as fractions of the image */
+  const IMG = { w: 2000, h: 1091 };
+  const SITTER = { x0: .585, x1: .705, y0: .70, y1: .875 };  // man on the rock
+  const SCREEN = { x: .66, y: .738 };                         // laptop glow
+  const HINT_AT = { x: .645, y: .655 };
+  const FOCUS = { x: .64, y: .5 };  // what stays in frame on narrow screens
+
+  /* ── cover-fit maths, shared by shader and hit-testing ── */
+  let vw = innerWidth, vh = innerHeight;
+  const cover = () => {
+    const s = Math.max(vw / IMG.w, vh / IMG.h);
+    const dw = IMG.w * s, dh = IMG.h * s;
+    const ox = Math.min(0, Math.max(vw - dw, vw / 2 - FOCUS.x * dw));
+    const oy = Math.min(0, Math.max(vh - dh, vh / 2 - FOCUS.y * dh));
+    return { s, dw, dh, ox, oy };
   };
-  fit(); addEventListener('resize', fit);
+  const toImg = (x, y) => { const c = cover(); return { u: (x - c.ox) / c.dw, v: (y - c.oy) / c.dh }; };
+  const toScreen = (u, v) => { const c = cover(); return { x: c.ox + u * c.dw, y: c.oy + v * c.dh }; };
+  const onSitter = (x, y) => { const p = toImg(x, y); return p.u > SITTER.x0 && p.u < SITTER.x1 && p.v > SITTER.y0 && p.v < SITTER.y1; };
+
+  const hint = document.getElementById('hint');
+  const sitterBtn = document.getElementById('sitterBtn');
+  const place = () => {
+    const h = toScreen(HINT_AT.x, HINT_AT.y);
+    hint.style.left = h.x + 'px'; hint.style.top = h.y + 'px';
+    const b = toScreen((SITTER.x0 + SITTER.x1) / 2, (SITTER.y0 + SITTER.y1) / 2);
+    sitterBtn.style.left = b.x + 'px'; sitterBtn.style.top = b.y + 'px';
+  };
 
   /* ── meet / leave ── */
-  const sitter = document.getElementById('sitter');
-  const meet = () => body.classList.add('met');
-  const leave = () => body.classList.remove('met');
-  sitter.addEventListener('click', meet);
-  sitter.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); meet(); } });
+  let meltT0 = 0, melting = 0;
+  const meet = () => { if (body.classList.contains('met')) return; body.classList.add('met'); melting = 1; meltT0 = performance.now(); };
+  const leave = () => { body.classList.remove('met'); melting = 0; };
+  sitterBtn.addEventListener('click', meet);
   document.getElementById('back').addEventListener('click', leave);
   addEventListener('keydown', e => { if (e.key === 'Escape') leave(); });
 
-  /* ── water on paper ──
-     Each drop soaks outward with a ragged edge, leaves a darker tide-line
-     at its rim (how real wet paper looks), then dries and disappears. */
-  const cv = document.getElementById('wet');
-  const ctx = cv.getContext('2d');
-  let W, H, dpr;
+  /* ── WebGL: the painting, smeared like wet oil where the cursor drags ── */
+  const cv = document.getElementById('paint');
+  const gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: false });
+  const MAXP = 24;
+
+  const showFallback = () => {
+    cv.hidden = true;
+    const f = document.getElementById('fallback'); f.hidden = false;
+    f.addEventListener('click', e => { if (onSitter(e.clientX, e.clientY)) meet(); });
+    f.addEventListener('pointermove', e => body.classList.toggle('hot', onSitter(e.clientX, e.clientY)));
+  };
+  if (!gl) { showFallback(); place(); hint.classList.add('on'); addEventListener('resize', () => { vw = innerWidth; vh = innerHeight; place(); }); return; }
+
+  const VS = `attribute vec2 p; varying vec2 vUv;
+    void main(){ vUv = p * .5 + .5; vUv.y = 1. - vUv.y; gl_Position = vec4(p, 0., 1.); }`;
+  const FS = `precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D tex;
+    uniform vec2 res;          // canvas px
+    uniform vec4 fit;          // ox, oy, dw, dh (px)
+    uniform float time, melt, still;
+    uniform vec4 pts[${MAXP}]; // x, y (px), vx, vy (px)
+    uniform float age[${MAXP}];
+    uniform vec2 screenUv;
+
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
+      return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y); }
+
+    void main(){
+      vec2 px = vUv * res;
+      vec2 disp = vec2(0.);
+      vec2 grad = vec2(0.);
+      for (int i = 0; i < ${MAXP}; i++) {
+        float a = age[i];
+        if (a >= 1.) continue;
+        vec2 d = px - pts[i].xy;
+        float r = 85. + 60. * a;                 // the smear widens as it settles
+        float w = exp(-dot(d, d) / (r * r)) * pow(1. - a, 2.);
+        // drag paint along the stroke: sample from behind the motion
+        disp -= pts[i].zw * w * 2.6;
+        // a slow ring, like a thumb pressed into wet paint
+        float dl = length(d) + 1e-3;
+        disp += (d / dl) * sin(dl * .09 - a * 9.) * w * 10.;
+        grad += -2. * d / (r * r) * w;
+      }
+      // brush-scale wobble so the smear breaks up along the strokes
+      vec2 n = vec2(noise(px * .03 + time * .2), noise(px * .03 + 17.3 - time * .2)) - .5;
+      disp += n * length(disp) * 1.2;
+
+      // the lake breathes a little
+      vec2 iuv = (px - fit.xy) / fit.zw;
+      float lake = smoothstep(.52, .56, iuv.y) * smoothstep(.54, .6, iuv.x) * (1. - smoothstep(.83, .9, iuv.y)) * (1. - still);
+      disp.x += sin(iuv.y * 260. + time * 1.4) * 1.1 * lake;
+
+      // dissolve when you meet Shrey
+      disp += (vec2(noise(px * .006 + 3.), noise(px * .006 + 9.)) - .5) * melt * 70.;
+
+      vec2 uv = (px + disp - fit.xy) / fit.zw;
+      vec3 col = texture2D(tex, clamp(uv, 0., 1.)).rgb;
+
+      // wet sheen: light from the upper right catching the disturbed paint
+      float sheen = clamp(dot(grad, normalize(vec2(-.6, .8))) * 9., 0., 1.);
+      col += sheen * .14 * vec3(1., .95, .85);
+
+      // laptop screen pulses softly
+      vec2 sd = (iuv - screenUv) * vec2(fit.z / fit.w, 1.);
+      float glow = exp(-dot(sd, sd) / .0009) * (.55 + .45 * sin(time * 1.7)) * (1. - still * .6);
+      col += glow * .16 * vec3(1., .85, .55);
+
+      gl_FragColor = vec4(col, 1.);
+    }`;
+
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s); return s; };
+  let prog;
+  try {
+    prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw gl.getProgramInfoLog(prog);
+  } catch (err) { console.warn(err); showFallback(); place(); hint.classList.add('on'); return; }
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = n => gl.getUniformLocation(prog, n);
+  const u = { res: U('res'), fit: U('fit'), time: U('time'), melt: U('melt'), still: U('still'),
+              pts: U('pts'), age: U('age'), screenUv: U('screenUv') };
+  gl.uniform2f(u.screenUv, SCREEN.x, SCREEN.y);
+  gl.uniform1f(u.still, reduced ? 1 : 0);
+
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([42, 42, 34, 255]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  const img = new Image();
+  img.onload = () => {
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    setTimeout(() => hint.classList.add('on'), 900);
+  };
+  img.onerror = showFallback;
+  img.src = 'assets/lake.webp';
+
+  let dpr = 1;
   const size = () => {
+    vw = innerWidth; vh = innerHeight;
     dpr = Math.min(devicePixelRatio || 1, 2);
-    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
-    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
+    gl.viewport(0, 0, cv.width, cv.height);
+    place();
   };
   size(); addEventListener('resize', size);
 
-  const drops = [];
-  const LIFE = 2600, N = 28;
+  /* ── pointer trail ── */
+  const LIFE = 1700;
+  const trail = [];
   let last = null;
-
-  const spawn = (x, y, big) => {
-    const r = (big ? 26 : 12 + Math.random() * 16) * dpr;
-    const p1 = Math.random() * 6.3, p2 = Math.random() * 6.3;
-    const edge = Array.from({ length: N }, (_, i) => {
-      const a = i / N * Math.PI * 2;
-      return 1 + 0.12 * Math.sin(a * 2 + p1) + 0.06 * Math.sin(a * 5 + p2) + 0.025 * (Math.random() - .5);
-    });
-    drops.push({ x: x * dpr, y: y * dpr, r, edge, t0: performance.now(), rot: Math.random() * 6.3 });
-    if (drops.length > 160) drops.shift();
-  };
-
-  const onMove = e => {
+  addEventListener('pointermove', e => {
     if (body.classList.contains('met')) return;
-    const x = e.clientX, y = e.clientY;
-    if (!last) { last = { x, y }; spawn(x, y); return; }
-    const d = Math.hypot(x - last.x, y - last.y);
-    const step = reduced ? 60 : 16;
-    if (d >= step) {
-      const n = Math.floor(d / step);
-      for (let i = 1; i <= n; i++)
-        spawn(last.x + (x - last.x) * i / n + (Math.random() - .5) * 6,
-              last.y + (y - last.y) * i / n + (Math.random() - .5) * 6);
-      last = { x, y };
-    }
-  };
-  addEventListener('pointermove', onMove, { passive: true });
-  addEventListener('pointerdown', e => { if (!body.classList.contains('met')) spawn(e.clientX, e.clientY, true); });
-  addEventListener('pointerleave', () => last = null);
+    body.classList.toggle('hot', onSitter(e.clientX, e.clientY));
+    if (reduced) return;
+    const x = e.clientX, y = e.clientY, now = performance.now();
+    if (last && Math.hypot(x - last.x, y - last.y) < 10) return;
+    let vx = last ? x - last.x : 0, vy = last ? y - last.y : 0;
+    const m = Math.hypot(vx, vy), cap = 40;
+    if (m > cap) { vx *= cap / m; vy *= cap / m; }
+    trail.push({ x, y, vx, vy, t: now });
+    if (trail.length > MAXP) trail.shift();
+    last = { x, y };
+  }, { passive: true });
+  addEventListener('pointerleave', () => { last = null; body.classList.remove('hot'); });
+  cv.addEventListener('click', e => { if (onSitter(e.clientX, e.clientY)) meet(); });
 
-  const shape = (d, rr) => {
-    const pt = i => {
-      const a = d.rot + (i / N) * Math.PI * 2, k = d.edge[i % N] * rr;
-      return [d.x + Math.cos(a) * k, d.y + Math.sin(a) * k];
-    };
-    ctx.beginPath();
-    let [ax, ay] = pt(0), [bx, by] = pt(1);
-    ctx.moveTo((ax + bx) / 2, (ay + by) / 2);
-    for (let i = 1; i <= N; i++) {
-      const [cx, cy] = pt(i + 1), [px, py] = pt(i);
-      ctx.quadraticCurveTo(px, py, (px + cx) / 2, (py + cy) / 2);
-    }
-    ctx.closePath();
-  };
-
+  const P = new Float32Array(MAXP * 4), A = new Float32Array(MAXP).fill(1);
   const frame = now => {
-    ctx.clearRect(0, 0, W, H);
-    for (let i = drops.length - 1; i >= 0; i--) {
-      const d = drops[i];
-      const t = (now - d.t0) / LIFE;
-      if (t >= 1) { drops.splice(i, 1); continue; }
-      const spread = 1 + 0.55 * (1 - Math.pow(1 - Math.min(t * 1.6, 1), 3));
-      const fade = t < .35 ? 1 : 1 - (t - .35) / .65;
-      const rr = d.r * spread;
-      // soaked body: slightly darker, faintly blue, densest at the rim
-      const g = ctx.createRadialGradient(d.x, d.y, rr * .1, d.x, d.y, rr * 1.1);
-      g.addColorStop(0, `rgba(77,106,134,${.05 * fade})`);
-      g.addColorStop(.75, `rgba(77,106,134,${.09 * fade})`);
-      g.addColorStop(1, `rgba(60,82,104,${.16 * fade})`);
-      shape(d, rr); ctx.fillStyle = g; ctx.fill();
-      // tide-line
-      ctx.lineWidth = 1.1 * dpr;
-      ctx.strokeStyle = `rgba(52,72,92,${.22 * fade})`;
-      ctx.stroke();
+    const c = cover();
+    for (let i = 0; i < MAXP; i++) {
+      const p = trail[i];
+      if (!p) { A[i] = 1; continue; }
+      const a = (now - p.t) / LIFE;
+      P[i*4] = p.x * dpr; P[i*4+1] = p.y * dpr; P[i*4+2] = p.vx * dpr; P[i*4+3] = p.vy * dpr;
+      A[i] = Math.min(a, 1);
     }
+    while (trail.length && now - trail[0].t > LIFE) trail.shift();
+    const melt = melting ? Math.min((now - meltT0) / 1400, 1) : 0;
+    gl.uniform2f(u.res, cv.width, cv.height);
+    gl.uniform4f(u.fit, c.ox * dpr, c.oy * dpr, c.dw * dpr, c.dh * dpr);
+    gl.uniform1f(u.time, reduced ? 0 : now / 1000);
+    gl.uniform1f(u.melt, reduced ? 0 : melt);
+    gl.uniform4fv(u.pts, P); gl.uniform1fv(u.age, A);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);

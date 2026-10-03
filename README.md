@@ -1,12 +1,13 @@
 # Shrey Sharma — portfolio
 
-A pencil sketch on paper: a house, a lake, and me sitting by the water with a
-laptop. Water soaks into the paper wherever the cursor goes, then dries.
-Click the person by the lake and the scene fades out. I stand up in the
-middle and say hi.
+An oil painting of a cottage and a lake, with me on a rock by the water with a
+laptop. Drag the cursor across it and the paint smears like it is still wet,
+then settles. Click me by the lake and the painting dissolves into a portrait
+that says hi.
 
-Everything is in `index.html`: inline SVG for the drawing, a canvas for the
-water, no build step and no libraries.
+`index.html` holds everything: a WebGL fragment shader draws the painting and
+the wet-paint smear, with a plain `<img>` fallback when WebGL is unavailable.
+The images are in `assets/`. No build step and no libraries.
 
 ## Running it
 
