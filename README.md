@@ -1,46 +1,35 @@
 # Shrey Sharma — portfolio
 
-One page, one object. A lattice of 1,728 cells — a tensor — that never leaves
-the screen and reshapes itself into whatever the section is about. No build step,
-no bundler: three files and a CDN import.
+A white page with a status pill, an `S/` mark, "Hey, I'm Shrey 👋", the headline
+"AI and ML Engineer", an avatar, an "Ask my AI agent" bar and a four-item dock
+(Me · Projects · RAG & Agents · Contact). Moving the cursor spreads vibrant
+watercolour ink across the page. Projects sit on a circular carousel you can drag.
 
-| Section  | The lattice becomes                              | Why                          |
-|----------|--------------------------------------------------|------------------------------|
-| Hero     | a loose lattice                                  | raw material                 |
-| Approach | a tight solid cube                               | structure, rigor             |
-| KARMA    | a GPU grid with an execution wave sweeping it    | kernels running              |
-| Repliq   | a ring with three pulses circling it             | the reason → act → observe loop |
-| Llama 2  | a frozen matrix plus two thin bright slabs       | W + ΔW — literally LoRA      |
-| Now      | a low horizon with one lit cell moving           | the current work             |
-| Contact  | the loose lattice again                          | bookend                      |
+Built with Vite, React, Tailwind CSS v4 and lucide icons. The fluid cursor and the
+carousel are [React Bits](https://reactbits.dev) components in
+`src/components/reactbits/` (`npx shadcn@latest add @react-bits/CircularCarousel-JS-CSS`
+installs the carousel). `CircularCarousel` is unmodified. `SplashCursor` has one
+change, marked in its display shader: light-theme ink is absorbed into pure white
+(`1 - clamp(c * 0.45, 0, 0.65)`) so trails never turn grey at the edges.
 
-## Files
+## Editing
 
-```
-index.html   the page — all copy lives here
-style.css    type, layout, reveal transitions
-scene.js     the tensor: layouts, scroll blending, per-layout motion (Three.js)
-resume.pdf
-```
-
-`scene.js` is where the argument is made. Each layout is a function returning
-positions, scales and glow for every cell; `LIVE` gives each layout its motion;
-the frame loop blends between adjacent layouts by scroll position, with a
-per-cell lag so the morph ripples instead of snapping.
+- **Projects:** `src/data/projects.js` holds every title, number and bullet. The
+  carousel cards are drawn from it (`src/data/cardArt.js`).
+- **Avatar:** `public/avatar.png` (a square, transparent-background Memoji). If it
+  fails to load, an animated iridescent orb shows instead.
+- **Ink colours:** the `SplashCursor` props in `src/App.jsx`.
+- **Resume:** `public/resume.pdf`.
 
 ## Running it
 
-Any static server — the module import needs `http://`, not `file://`.
-
 ```bash
-python3 -m http.server 8000
-# → http://localhost:8000
+npm install
+npm run dev       # http://localhost:5173
+npm run build     # outputs dist/
 ```
 
-## Dependency
+## Deploying
 
-Three.js 0.170 from jsDelivr via an import map in `index.html`. Nothing else.
-
-## Still to do
-
-- [ ] Blog / writing links, once there are posts to point at
+`.github/workflows/deploy.yml` builds and publishes on every push to `main`.
+One-time setup: repo **Settings → Pages → Source → GitHub Actions**.

@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* Avatar fallback: a slow iridescent orb in the same five inks as the cursor. */
+@keyframes orb-spin { to { transform: rotate(360deg); } }
+@keyframes orb-drift {
+  0%, 100% { transform: translate(-6%, -4%) scale(1); }
+  50% { transform: translate(6%, 5%) scale(1.12); }
+}
+.orb { position: relative; overflow: hidden; border-radius: 9999px; background: #fff; isolation: isolate; }
+.orb::before {
+  content: ""; position: absolute; inset: -30%;
+  background: conic-gradient(from 0deg, #fb6d51, #fbca51, #51fbbc, #51e4fb, #5184fb, #fb6d51);
+  filter: blur(18px) saturate(1.1); opacity: .75;
+  animation: orb-spin 14s linear infinite;
+}
+.orb::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 42%),
+    radial-gradient(circle at 70% 75%, rgba(255,255,255,.55), rgba(255,255,255,0) 45%);
+  animation: orb-drift 9s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb::before, .orb::after { animation: none; }
+}
