@@ -10,18 +10,18 @@ const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefe
 export default function App() {
   return (
     <>
-      {/* Pastel ink that spreads under the cursor. Light theme makes it absorb
-          into the white page like watercolour instead of glowing. */}
+      {/* Vibrant ink (HSL S 95%, L 65%: coral, cyan, electric blue, gold, mint) absorbed
+          into pure white by the light-theme display shader, like watercolour. */}
       {!reducedMotion && (
         <SplashCursor
           theme="light"
-          colors={['#6f9dff', '#ff8cb4', '#5fd6a4', '#a98bff', '#ffb35c']}
+          colors={['#fb6d51', '#51e4fb', '#5184fb', '#fbca51', '#51fbbc']}
           rainbow={false}
           colorSpeed={0.25}
-          intensity={0.6}
+          intensity={2.2}
           size={0.9}
           swirl={2}
-          trail={0.85}
+          trail={1}
           shading={0}
           glow={0}
           quality={isPhone ? 'medium' : 'high'}
@@ -36,7 +36,7 @@ export default function App() {
       </main>
       <footer className="foot">
         <span>Shrey Sharma</span>
-        <span>Built with React, a fluid simulation and a lot of white space.</span>
+        <span>Built with React and a fluid simulation.</span>
       </footer>
     </>
   );

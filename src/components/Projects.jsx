@@ -17,19 +17,20 @@ export default function Projects() {
     <section className="section" id="projects" aria-labelledby="projects-title">
       <p className="eyebrow">Projects</p>
       <h2 id="projects-title" className="section__title">Drag the ring. Every number is measured.</h2>
-      <div className="ring">
+      <div className="project-ring">
         <CircularCarousel
           items={items}
-          preset="orbit"
+          preset="cylinder"
+          intro="rise"
           cardWidth={isPhone ? 190 : 240}
           aspectRatio={4 / 5}
           gap={28}
           autoplay="drift"
           speed={10}
           captions
-          fadeColor="#fbfbfd"
+          fadeColor="#ffffff"
           depthFade={0.5}
-          innerShade={0.6}
+          innerShade={1}
           cornerRadius={22}
           onChange={setActive}
           onItemClick={(_, i) => setActive(i)}

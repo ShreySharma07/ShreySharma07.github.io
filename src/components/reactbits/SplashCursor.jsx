@@ -216,10 +216,10 @@ void main() {
   float peak = max(c.r, max(c.g, c.b));
   float grain = (hash(gl_FragCoord.xy) - 0.5) / 255.0 * smoothstep(0.0, 0.03, peak);
   if (light > 0.5) {
-    vec3 transmit = exp(-2.4 * c);
-    float low = min(transmit.r, min(transmit.g, transmit.b));
-    float alpha = clamp(1.0 - low + grain, 0.0, 1.0);
-    outColor = vec4(min(transmit - low, vec3(alpha)), alpha);
+    // Portfolio change: clean subtractive absorption on pure white. Each channel
+    // can lose at most 65%, so ink never darkens toward grey or black at its edges.
+    vec3 absorb = clamp(c * 0.45, 0.0, 0.65);
+    outColor = vec4(vec3(1.0) - absorb, 1.0);
   } else {
     c = max(c + grain, 0.0);
     float alpha = clamp(max(c.r, max(c.g, c.b)), 0.0, 1.0);
