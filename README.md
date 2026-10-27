@@ -16,8 +16,8 @@ change, marked in its display shader: light-theme ink is absorbed into pure whit
 
 - **Projects:** `src/data/projects.js` holds every title, number and bullet. The
   carousel cards are drawn from it (`src/data/cardArt.js`).
-- **Avatar:** drop a square image at `public/avatar.png`. Until then an animated
-  iridescent orb shows.
+- **Avatar:** `public/avatar.png` (a square, transparent-background Memoji). If it
+  fails to load, an animated iridescent orb shows instead.
 - **Ink colours:** the `SplashCursor` props in `src/App.jsx`.
 - **Resume:** `public/resume.pdf`.
 

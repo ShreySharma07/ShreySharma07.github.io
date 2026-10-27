@@ -8,7 +8,7 @@ const scrollTo = id => {
 };
 
 export default function Hero() {
-  // /avatar.png is optional. Until it exists the iridescent orb stands in.
+  // Memoji at /avatar.png; the iridescent orb stands in if it fails to load.
   const [hasPhoto, setHasPhoto] = useState(true);
 
   return (
@@ -47,7 +47,7 @@ export default function Hero() {
           <img
             src={`${import.meta.env.BASE_URL}avatar.png`}
             alt="Shrey Sharma"
-            className="h-full w-full rounded-full object-cover"
+            className="h-full w-full rounded-full bg-linear-to-b from-sky-100 via-white to-rose-50 object-cover"
             onError={() => setHasPhoto(false)}
           />
         ) : (
