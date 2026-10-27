@@ -19,7 +19,7 @@ export default function Contact() {
   };
 
   return (
-    <section className="section" id="contact" aria-labelledby="contact-title">
+    <section className="section section--wash" id="contact" aria-labelledby="contact-title" data-reveal>
       <p className="eyebrow">Contact</p>
       <h2 id="contact-title" className="section__title">Building something that has to actually work? Say hi.</h2>
       <div className="glass panel contact">

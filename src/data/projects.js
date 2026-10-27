@@ -1,13 +1,14 @@
 // Every project's copy and numbers live here. The carousel card, the detail
-// panel and the card artwork all read from this list.
+// panel and the card artwork all read from this list. `glow` tints the
+// violet bloom on each card.
 export const PROJECTS = [
   {
     id: 'kario',
+    glow: '#8f7cff',
     title: 'Kario',
     subtitle: 'Distributed job ingestion',
     metric: '200+',
     metricLabel: 'companies, live',
-    tint: ['#cfe0ff', '#e9e1ff'],
     stack: ['Python', 'FastAPI', 'Cloudflare Workers', 'PostgreSQL'],
     points: [
       'Custom connectors for 12+ ATS platforms (Greenhouse, Lever, Workday, Ashby and more) pull live postings from 200+ companies.',
@@ -18,11 +19,11 @@ export const PROJECTS = [
   },
   {
     id: 'karma',
+    glow: '#b9a7ff',
     title: 'KARMA',
     subtitle: 'Automated code optimisation',
     metric: '8.99×',
     metricLabel: 'speedup, verified',
-    tint: ['#ffd9e4', '#ffe9d1'],
     stack: ['Python', 'FastAPI', 'Redis', 'CUDA'],
     points: [
       'A pipeline that writes, tests and benchmarks performance-critical code on its own, reaching up to 8.99× speedup.',
@@ -33,11 +34,11 @@ export const PROJECTS = [
   },
   {
     id: 'repliq',
+    glow: '#a6e3ff',
     title: 'Repliq',
     subtitle: 'Secure workflow automation',
     metric: '20-step',
     metricLabel: 'Salesforce flow, end to end',
-    tint: ['#cdf3e3', '#d8ecff'],
     stack: ['Python', 'FastAPI', 'Docker', 'OAuth 2.0'],
     points: [
       'A FastAPI service that turns a screen recording into a workflow it can replay.',
@@ -48,11 +49,11 @@ export const PROJECTS = [
   },
   {
     id: 'fraud',
+    glow: '#7c5cff',
     title: 'Fraud Detection',
     subtitle: 'Real-time scoring on AWS',
     metric: '97.7%',
     metricLabel: 'AUC at 1-in-100 fraud',
-    tint: ['#e5dbff', '#ffd8e6'],
     stack: ['Python', 'AWS Lambda', 'SageMaker', 'CDK'],
     points: [
       'A serverless scoring service on Lambda and SageMaker, with all infrastructure defined in AWS CDK.',
@@ -63,11 +64,11 @@ export const PROJECTS = [
   },
   {
     id: 'argus',
+    glow: '#c7a8ff',
     title: 'Argus',
     subtitle: 'Agentic fraud investigation',
     metric: '590k',
     metricLabel: 'transactions in the graph',
-    tint: ['#ffe7c4', '#dff5e8'],
     stack: ['TigerGraph', 'GraphRAG', 'MCP', 'React'],
     points: [
       'Investigates card-fraud alerts the way an analyst would, from a TigerGraph knowledge graph of 590k transactions and 5,565 closed cases.',
@@ -78,11 +79,11 @@ export const PROJECTS = [
   },
   {
     id: 'llama',
+    glow: '#9fb8ff',
     title: 'Math Llama 2',
     subtitle: 'QLoRA fine-tuning',
     metric: '−70%',
     metricLabel: 'GPU memory',
-    tint: ['#d6efff', '#ffe0ec'],
     stack: ['PyTorch', 'QLoRA', 'PEFT', 'Docker'],
     points: [
       'Fine-tuned Llama 2 on GSM8K for maths reasoning with QLoRA, PEFT and 8-bit quantisation.',
