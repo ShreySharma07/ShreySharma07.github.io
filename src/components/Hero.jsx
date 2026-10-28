@@ -1,68 +1,64 @@
-import { useEffect, useRef, useState } from 'react';
-import Capsule from './Capsule.jsx';
-import { inkBurst, inkBurstAt, reducedMotion } from '../lib.js';
+import { useEffect, useState } from 'react';
+import { FileText, Mail, PenLine } from 'lucide-react';
+import photo from '../assets/photo.jpg';
+import Reveal from './Reveal.jsx';
+import { GitHubMark, LinkedInMark } from './icons.jsx';
+import { SITE } from '../data/site.js';
+import { reducedMotion, scrollToId } from '../motion.js';
 
-const WORDS = ['AI', 'and', 'ML', 'Engineer'];
+// Inline link with an icon and an underline that draws in on hover.
+const Inline = ({ href, icon: Icon, children, ...rest }) => (
+  <a className="inline-link" href={href} {...rest}>
+    {Icon && <Icon className="inline-link__icon" aria-hidden="true" />}
+    <b>{children}</b>
+  </a>
+);
 
-export default function Hero() {
-  const [hasPhoto, setHasPhoto] = useState(true);
-  const avatarRef = useRef(null);
-
-  // Load sequence: ink blooms out of the avatar, then drops now and then while
-  // the visitor is idle on the first screen, so touch and still visitors see it.
+const Roles = () => {
+  const [i, setI] = useState(0);
   useEffect(() => {
     if (reducedMotion()) return undefined;
-    const first = setTimeout(() => inkBurstAt(avatarRef.current), 350);
-    let lastMove = performance.now();
-    const moved = () => { lastMove = performance.now(); };
-    window.addEventListener('pointermove', moved, { passive: true });
-    const idle = setInterval(() => {
-      if (performance.now() - lastMove < 5000 || window.scrollY > window.innerHeight * 0.6) return;
-      inkBurst(window.innerWidth * (0.15 + Math.random() * 0.7), window.innerHeight * (0.2 + Math.random() * 0.55));
-    }, 6000);
-    return () => { clearTimeout(first); clearInterval(idle); window.removeEventListener('pointermove', moved); };
+    const id = setInterval(() => setI(n => (n + 1) % SITE.roles.length), 2800);
+    return () => clearInterval(id);
   }, []);
-
   return (
-    <header id="top" className="hero">
-      <div className="topbar">
-        <span className="topbar__status">
-          <span className="status-dot" aria-hidden="true" />
-          Available <span className="topbar__dash">—</span> AI / Backend roles
-        </span>
-        <a href="#top" className="monogram" aria-label="Shrey Sharma, home">S<span>/</span></a>
-        <a href="https://github.com/ShreySharma07" target="_blank" rel="noopener" className="topbar__link">
-          GitHub
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </a>
-      </div>
+    <p className="roles" aria-label={SITE.roles.join(', ')}>
+      <span key={i} className="roles__word" aria-hidden="true">{SITE.roles[i]}</span>
+    </p>
+  );
+};
 
-      <div className="hero__body">
-        <div className="hero__intro">
-          <div ref={avatarRef} className="avatar">
-            {hasPhoto ? (
-              <img src={`${import.meta.env.BASE_URL}avatar.png`} alt="Shrey's Memoji" onError={() => setHasPhoto(false)} />
-            ) : (
-              <div className="orb" role="img" aria-label="Avatar placeholder" />
-            )}
-          </div>
-          <div>
-            <p className="hero__kicker">Hey, I’m Shrey</p>
-            <p className="hero__strip">LLM Agents · RAG · Distributed Backends · FastAPI</p>
-          </div>
+export default function Hero() {
+  return (
+    <section className="hero" id="top">
+      <Reveal className="hero__id">
+        <img className="hero__photo" src={photo} alt="Shrey Sharma" width="56" height="56" />
+        <div>
+          <h1 className="hero__name">Shrey Sharma</h1>
+          <Roles />
         </div>
-        <h1 className="hero__title" aria-label="AI and ML Engineer">
-          {WORDS.map((w, i) => (
-            <span key={w} className="hero__word" aria-hidden="true">
-              <span style={{ animationDelay: `${450 + i * 80}ms` }}>{w}</span>
-            </span>
-          ))}
-        </h1>
-      </div>
+      </Reveal>
 
-      <div className="hero__dock">
-        <Capsule />
+      <div className="prose">
+        <Reveal as="p" delay={80}>
+          I build <b>AI systems</b> and the <i>backend</i> that proves they <b>actually work</b>: agent pipelines,
+          <i> retrieval</i>, fine-tuning, and the <b>distributed services</b> underneath them, mostly in <i>Python</i>.
+        </Reveal>
+        <Reveal as="p" delay={160}>
+          For me, the interesting question is never <i>“is it fast?”</i> but <b>“is it true?”</b>. When my code-optimisation
+          pipeline reported a <i>40×</i> speedup, I didn’t ship it. I found out why it was wrong and built a{' '}
+          <b>four-stage harness</b> that took false positives to <b>zero</b>. Its best <i>verified</i> result is{' '}
+          <b>8.99×</b>.
+        </Reveal>
+        <Reveal as="p" delay={240}>
+          I’m a <i>2026</i> Computer Science graduate (AI specialisation) from 🇮🇳 <b>India</b>, open to <i>AI and backend</i>{' '}
+          roles. Reach me by <Inline href={`mailto:${SITE.email}`} icon={Mail}>email</Inline>, on{' '}
+          <Inline href={SITE.github} icon={GitHubMark} target="_blank" rel="noopener">GitHub</Inline> and{' '}
+          <Inline href={SITE.linkedin} icon={LinkedInMark} target="_blank" rel="noopener">LinkedIn</Inline>, read my{' '}
+          <Inline href="#writing" icon={PenLine} onClick={e => { e.preventDefault(); scrollToId('writing'); }}>writing</Inline>, or grab the{' '}
+          <Inline href={`${import.meta.env.BASE_URL}resume.pdf`} icon={FileText} target="_blank" rel="noopener">resume</Inline>.
+        </Reveal>
       </div>
-    </header>
+    </section>
   );
 }
