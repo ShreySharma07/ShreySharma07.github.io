@@ -2,7 +2,7 @@ const SKILLS = ['Python', 'Java', 'SQL', 'FastAPI', 'PostgreSQL', 'Redis', 'Dock
 
 export default function About() {
   return (
-    <section className="section" id="about" aria-labelledby="about-title">
+    <section className="section section--wash" id="about" aria-labelledby="about-title" data-reveal>
       <p className="eyebrow">About me</p>
       <h2 id="about-title" className="section__title">I build AI systems, and the backend that proves they work.</h2>
       <div className="glass panel about">

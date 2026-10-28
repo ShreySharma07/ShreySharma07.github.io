@@ -1,29 +1,105 @@
-// Draws each project's carousel card as an SVG, so the artwork always matches
-// the copy in projects.js.
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+// Draws each project's carousel card on a canvas. A canvas (unlike an SVG in
+// an <img>) can use the page's web fonts, so the cards set in Geist.
+const W = 600;
+const H = 720;
+const CHROME = ['#c9ccd6', '#e8e6f2', '#b9a7ff', '#8f7cff', '#a6e3ff'];
 
-export const cardArt = p => {
-  const [a, b] = p.tint;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/>
-    </linearGradient>
-    <radialGradient id="h" cx="0.25" cy="0.15" r="0.8">
-      <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="soft"><feGaussianBlur stdDeviation="28"/></filter>
-  </defs>
-  <rect width="400" height="500" fill="url(#g)"/>
-  <circle cx="330" cy="400" r="120" fill="${a}" filter="url(#soft)" opacity=".9"/>
-  <circle cx="60" cy="430" r="90" fill="${b}" filter="url(#soft)" opacity=".8"/>
-  <rect width="400" height="500" fill="url(#h)"/>
-  <g font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" fill="#1d1d1f">
-    <text x="32" y="64" font-size="20" font-weight="500" fill="#3a3a3f" opacity=".75">${esc(p.subtitle)}</text>
-    <text x="30" y="250" font-size="92" font-weight="700" letter-spacing="-3">${esc(p.metric)}</text>
-    <text x="34" y="290" font-size="20" font-weight="500" fill="#3a3a3f">${esc(p.metricLabel)}</text>
-    <text x="32" y="452" font-size="40" font-weight="650" letter-spacing="-1">${esc(p.title)}</text>
-  </g>
-</svg>`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+const roundRect = (ctx, x, y, w, h, r) => {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+};
+
+const chrome = (ctx, x0, y0, x1, y1) => {
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  CHROME.forEach((c, i) => g.addColorStop(i / (CHROME.length - 1), c));
+  return g;
+};
+
+const drawCard = (p, index, total) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // base
+  const base = ctx.createLinearGradient(0, 0, 0, H);
+  base.addColorStop(0, '#111118');
+  base.addColorStop(1, '#08080b');
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, W, H);
+
+  // violet bloom, low right, plus a faint silver catch-light top left
+  const bloom = ctx.createRadialGradient(W * 0.78, H * 0.86, 0, W * 0.78, H * 0.86, W * 0.85);
+  bloom.addColorStop(0, `${p.glow}66`);
+  bloom.addColorStop(0.45, `${p.glow}1f`);
+  bloom.addColorStop(1, 'transparent');
+  ctx.fillStyle = bloom;
+  ctx.fillRect(0, 0, W, H);
+  const catch_ = ctx.createRadialGradient(W * 0.1, H * 0.05, 0, W * 0.1, H * 0.05, W * 0.7);
+  catch_.addColorStop(0, 'rgba(232,230,242,0.10)');
+  catch_.addColorStop(1, 'transparent');
+  ctx.fillStyle = catch_;
+  ctx.fillRect(0, 0, W, H);
+
+  // chrome hairline
+  roundRect(ctx, 1.5, 1.5, W - 3, H - 3, 42);
+  ctx.lineWidth = 2;
+  ctx.globalAlpha = 0.45;
+  ctx.strokeStyle = chrome(ctx, 0, 0, W, H);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  const pad = 52;
+  ctx.textBaseline = 'alphabetic';
+
+  // top row: subtitle and index, mono
+  ctx.font = '500 22px "Geist Mono", ui-monospace, monospace';
+  ctx.fillStyle = '#9a9cab';
+  ctx.fillText(p.subtitle.toUpperCase(), pad, pad + 22, W - pad * 2 - 90);
+  const idx = `${String(index + 1).padStart(2, '0')}/${String(total).padStart(2, '0')}`;
+  ctx.textAlign = 'right';
+  ctx.fillText(idx, W - pad, pad + 22);
+  ctx.textAlign = 'left';
+
+  // metric in chrome, sized to fit
+  let size = 168;
+  const fit = () => {
+    ctx.font = `600 ${size}px Geist, system-ui, sans-serif`;
+    return ctx.measureText(p.metric).width;
+  };
+  while (fit() > W - pad * 2 && size > 60) size -= 4;
+  ctx.fillStyle = chrome(ctx, pad, 300 - size, W - pad, 330);
+  ctx.save();
+  ctx.shadowColor = 'rgba(143,124,255,0.35)';
+  ctx.shadowBlur = 40;
+  ctx.fillText(p.metric, pad - 4, 360);
+  ctx.restore();
+
+  ctx.font = '500 24px "Geist Mono", ui-monospace, monospace';
+  ctx.fillStyle = '#b8bac6';
+  ctx.fillText(p.metricLabel.toUpperCase(), pad, 412, W - pad * 2);
+
+  // title
+  ctx.font = '600 58px Geist, system-ui, sans-serif';
+  ctx.fillStyle = '#ecebf5';
+  ctx.fillText(p.title, pad, H - pad - 6, W - pad * 2);
+
+  return canvas.toDataURL('image/png');
+};
+
+// Waits (briefly) for the web fonts so the canvas draws in Geist, not a fallback.
+export const renderCards = async projects => {
+  if (document.fonts?.load) {
+    const fonts = Promise.all([
+      document.fonts.load('600 160px Geist'),
+      document.fonts.load('500 24px "Geist Mono"')
+    ]);
+    await Promise.race([fonts, new Promise(r => setTimeout(r, 2000))]).catch(() => {});
+  }
+  return projects.map((p, i) => drawCard(p, i, projects.length));
 };

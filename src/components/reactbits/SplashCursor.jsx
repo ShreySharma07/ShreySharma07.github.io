@@ -884,6 +884,15 @@ function SplashCursor({
       wake();
     };
 
+    // Portfolio change: the page can drop ink anywhere with
+    // window.dispatchEvent(new CustomEvent('ink:burst', { detail: { x, y } })), x/y in client px.
+    const onInkBurst = event => {
+      const point = locate(event.detail?.x ?? 0, event.detail?.y ?? 0);
+      if (!point) return;
+      bursts.push(point);
+      wake();
+    };
+
     const onPointerMove = event => {
       if (event.pointerType !== 'touch') track(`p${event.pointerId}`, event.clientX, event.clientY);
     };
@@ -916,6 +925,7 @@ function SplashCursor({
     };
     const onRestored = () => setGeneration(value => value + 1);
 
+    window.addEventListener('ink:burst', onInkBurst);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerdown', onPointerDown, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -932,6 +942,7 @@ function SplashCursor({
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      window.removeEventListener('ink:burst', onInkBurst);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('touchstart', onTouchStart);
