@@ -4,13 +4,23 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Shrey Sharma</title>
-<meta name="description" content="Shrey Sharma, AI Engineer. Backend and AI systems that are verified to work: Kario, KARMA, Repliq, real-time fraud detection."/>
-<meta property="og:title" content="Shrey Sharma — AI Engineer"/>
-<meta property="og:description" content="Backend and AI systems that are verified to work."/>
-<meta name="theme-color" content="#ffffff"/>
+<meta name="description" content="Shrey Sharma, AI & ML engineer. AI systems and the backend that proves they work: KARMA, Kario, Repliq, Argus."/>
+<meta property="og:title" content="Shrey Sharma — AI & ML Engineer"/>
+<meta property="og:description" content="AI systems and the backend that proves they work."/>
+<meta name="theme-color" content="#f8f9fb" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#0b0c0f" media="(prefers-color-scheme: dark)"/>
+<script>
+  // Set the theme before first paint so there is no flash.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('theme'); } catch (e) {}
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="root"></div>
